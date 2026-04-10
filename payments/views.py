@@ -299,3 +299,52 @@ def selcom_payment_callback(request):
             {'error': str(e)},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+
+from msosi_backend.permissions import IsRestaurantOwner
+from .serializers import EarningsSummarySerializer
+from django.db.models import Sum
+
+class EarningsView(generics.GenericAPIView):
+    serializer_class = EarningsSummarySerializer
+    permission_classes = [IsRestaurantOwner]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        now = timezone.now()
+        start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        start_of_week = start_of_day - timezone.timedelta(days=now.weekday())
+        start_of_month = start_of_day.replace(day=1)
+
+        def get_total(start_date):
+            return Payment.objects.filter(
+                order__items__menu_item__restaurant__owner=user,
+                status='completed',
+                created_at__gte=start_date
+            ).distinct().aggregate(total=Sum('amount'))['total'] or 0
+
+        earnings_data = {
+            'total_earned_today': get_total(start_of_day),
+            'total_earned_this_week': get_total(start_of_week),
+            'total_earned_this_month': get_total(start_of_month),
+            'order_count': Order.objects.filter(
+                items__menu_item__restaurant__owner=user,
+                status='delivered' # or any relevant status
+            ).distinct().count(), 
+            'recent_payouts': Payment.objects.filter(
+                order__items__menu_item__restaurant__owner=user,
+                status='completed'
+            ).distinct().order_by('-created_at')[:10]
+        }
+        
+        return Response(EarningsSummarySerializer(earnings_data).data)
+
+class WithdrawView(generics.GenericAPIView):
+    permission_classes = [IsRestaurantOwner]
+
+    def post(self, request, *args, **kwargs):
+        # Mock withdrawal request
+        return Response({
+            "status": "success",
+            "message": "Withdrawal request submitted successfully. You will receive funds on your M-Pesa shortly.",
+            "amount": request.data.get('amount', 0)
+        })

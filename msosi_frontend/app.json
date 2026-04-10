@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "Msosi Fasta",
+    "slug": "msosi-fasta",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "scheme": "msosi",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#C43C00"
+    },
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.msosi.fasta"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#C43C00"
+      },
+      "package": "com.msosi.fasta"
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-localization"
+    ]
+  }
+}
