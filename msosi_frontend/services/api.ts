@@ -87,7 +87,14 @@ export const authApi = {
     phone_number: string;
     address: string;
   }>) => api.put('/users/profile/', data),
+
+  forgotPassword: (email: string) =>
+    api.post('/users/forgot-password/', { email }),
+
+  resetPassword: (data: { email: string; otp: string; new_password: string }) =>
+    api.post('/users/reset-password/', data),
 };
+
 
 // ─── Restaurants ────────────────────────────────────────────
 export const restaurantsApi = {
