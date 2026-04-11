@@ -1,0 +1,145 @@
+{
+  "common": {
+    "getStarted": "Anza Sasa",
+    "signIn": "Ingia",
+    "signUp": "Jiunge",
+    "welcome": "Karibu",
+    "back": "Rudi",
+    "guest": "Mgeni",
+    "logout": "Toka",
+    "logoutConfirm": "Una uhakika unataka kutoka?",
+    "yes": "Ndio",
+    "no": "Hapana"
+  },
+  "splash": {
+    "tagline": "Chakula kitamu, haraka haraka"
+  },
+  "roleSelect": {
+    "title": "Karibu",
+    "subtitle": "Chagua safari yako ili kuendelea",
+    "customer": {
+      "title": "Mteja",
+      "desc": "Agiza chakula kitamu kutoka mikahawa mbalimbali"
+    },
+    "owner": {
+      "title": "Mmiliki wa Mkahawa",
+      "desc": "Ongeza biashara yako na ufikie wateja wengi"
+    },
+    "alreadyHaveAccount": "Tayari una akaunti?"
+  },
+  "login": {
+    "title": "Ingia",
+    "subtitle": "Karibu tena Msosi Fasta",
+    "username": "JINA LA MTUMIAJI",
+    "password": "NYWILA",
+    "usernamePlaceholder": "Ingiza jina lako",
+    "noAccount": "Huna akaunti?"
+  },
+  "register": {
+    "title": "Tengeneza Akaunti",
+    "customer": "Mteja",
+    "owner": "Mmiliki wa Mkahawa",
+    "username": "JINA LA MTUMIAJI",
+    "email": "BARUA PEPE",
+    "phone": "SIMU",
+    "password": "NYWILA"
+  },
+  "home": {
+    "greeting": "Habari",
+    "morning": "Habari za asubuhi",
+    "afternoon": "Habari za mchana",
+    "evening": "Habari za jioni",
+    "searchPlaceholder": "Tafuta chakula au mikahawa",
+    "nearby": "Mikahawa Karibu Nawe",
+    "resultsFor": "Matokeo ya \"%{search}\""
+  },
+  "settings": {
+    "title": "Mipangilio",
+    "account": "MIPANGILIO YA AKAUNTI",
+    "editProfile": "Hariri Wasifu",
+    "editProfileSub": "Badilisha jina, barua pepe, nk.",
+    "notifications": "Taarifa",
+    "notificationsSub": "Washa arifa za push",
+    "location": "Huduma za Eneo",
+    "locationSub": "Matokeo bora ya mikahawa",
+    "language": "LUGHA NA ENEO",
+    "appLanguage": "Lugha ya Programu",
+    "appLanguageSub": "Kiswahili / English",
+    "support": "MSAADA NA USALAMA",
+    "privacy": "Sera ya Faragha",
+    "privacySub": "Jinsi tunavyotumia data zako",
+    "password": "Badilisha Nywila",
+    "passwordSub": "Sasisha usalama",
+    "deleteAccount": "Futa Akaunti",
+    "deleteAccountSub": "Hatua ya kudumu"
+  },
+  "profile": {
+    "myOrders": "Maagizo Yangu",
+    "myAddresses": "Anwani Zangu",
+    "paymentMethods": "Njia za Malipo",
+    "myReviews": "Tathmini Zangu",
+    "help": "Msaada na Huduma",
+    "about": "Kuhusu Programu",
+    "stats": {
+      "orders": "Maagizo",
+      "reviews": "Tathmini",
+      "points": "Pointi"
+    }
+  },
+  "cart": {
+    "title": "Kikapu",
+    "viewCart": "Angalia Kikapu",
+    "addToCart": "Weka Kikapuni",
+    "emptyTitle": "Kikapu chako kipo tupu",
+    "emptyDesc": "Kikapu chako kipo tupu. Ongeza chakula kitamu sasa!",
+    "browseFood": "Tafuta Chakula",
+    "clearAll": "Futa Yote",
+    "summary": "Muhtasari",
+    "subtotal": "Chakula",
+    "delivery": "Usafirishaji",
+    "total": "Jumla",
+    "proceed": "Lipia Sasa",
+    "secured": "SECURED BY MSOSI FASTA PAY"
+  },
+  "orders": {
+    "title": "Maagizo Yangu",
+    "empty": "Hujafanya agizo lolote",
+    "emptyDesc": "Maagizo yako yataonekana hapa",
+    "status": {
+      "pending": "Linashughulikiwa",
+      "ready": "Tayari",
+      "delivered": "Limefika",
+      "cancelled": "Limeghairiwa"
+    }
+  },
+  "search": {
+    "title": "Tafuta",
+    "placeholder": "Tafuta chakula au mikahawa",
+    "noResults": "Hakuna matokeo",
+    "noResultsDesc": "Hatujapata ulichokuwa unatafuta"
+  },
+  "payment": {
+    "title": "Malipo",
+    "success": "Agizo Limepokelewa!",
+    "method": "Chagua Njia ya Malipo",
+    "pay": "Lipia Sasa"
+  },
+  "restaurant": {
+    "welcome": "Karibu ufurahie chakula kitamu!",
+    "menu": "Menyu",
+    "description": "Maelezo"
+  },
+  "food": {
+    "description": "Maelezo",
+    "available": "Inapatikana",
+    "unavailable": "Haijapatikana",
+    "defaultDesc": "Chakula kitamu kilichopikwa kwa weledi na viungo asilia. Karibu ufurahie ladha ya kipekee kutoka Msosi Fasta."
+  },
+  "navbar": {
+    "home": "Nyumbani",
+    "search": "Tafuta",
+    "cart": "Kikapu",
+    "orders": "Maagizo",
+    "profile": "Akaunti"
+  }
+}

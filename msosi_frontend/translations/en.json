@@ -1,0 +1,145 @@
+{
+  "common": {
+    "getStarted": "Get Started",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "welcome": "Welcome",
+    "back": "Back",
+    "guest": "Guest",
+    "logout": "Logout",
+    "logoutConfirm": "Are you sure you want to log out?",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "splash": {
+    "tagline": "Premium dining, delivered."
+  },
+  "roleSelect": {
+    "title": "Welcome",
+    "subtitle": "Select your journey to continue",
+    "customer": {
+      "title": "Customer",
+      "desc": "Order exquisite meals from curated restaurants"
+    },
+    "owner": {
+      "title": "Restaurant Partner",
+      "desc": "Manage your menu and grow your business"
+    },
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "login": {
+    "title": "Sign In",
+    "subtitle": "Welcome back to Msosi Fasta",
+    "username": "USERNAME",
+    "password": "PASSWORD",
+    "usernamePlaceholder": "Enter your username",
+    "noAccount": "Don't have an account?"
+  },
+  "register": {
+    "title": "Create Account",
+    "customer": "Customer",
+    "owner": "Restaurant Partner",
+    "username": "USERNAME",
+    "email": "EMAIL",
+    "phone": "PHONE",
+    "password": "PASSWORD"
+  },
+  "home": {
+    "greeting": "Hello",
+    "morning": "Good morning",
+    "afternoon": "Good afternoon",
+    "evening": "Good evening",
+    "searchPlaceholder": "Search for food or restaurants",
+    "nearby": "Restaurants Near You",
+    "resultsFor": "Results for \"%{search}\""
+  },
+  "settings": {
+    "title": "Settings",
+    "account": "ACCOUNT SETTINGS",
+    "editProfile": "Edit Profile",
+    "editProfileSub": "Change name, email, etc.",
+    "notifications": "Notifications",
+    "notificationsSub": "Enable push alerts",
+    "location": "Location Services",
+    "locationSub": "Better restaurant results",
+    "language": "LANGUAGE & REGION",
+    "appLanguage": "App Language",
+    "appLanguageSub": "Swahili / English",
+    "support": "SUPPORT & SECURITY",
+    "privacy": "Privacy Policy",
+    "privacySub": "How we use your data",
+    "password": "Change Password",
+    "passwordSub": "Update security",
+    "deleteAccount": "Delete Account",
+    "deleteAccountSub": "Permanent action"
+  },
+  "profile": {
+    "myOrders": "My Orders",
+    "myAddresses": "My Addresses",
+    "paymentMethods": "Payment Methods",
+    "myReviews": "My Reviews",
+    "help": "Help & Support",
+    "about": "About",
+    "stats": {
+      "orders": "Orders",
+      "reviews": "Reviews",
+      "points": "Points"
+    }
+  },
+  "cart": {
+    "title": "Cart",
+    "viewCart": "View Cart",
+    "addToCart": "Add to Cart",
+    "emptyTitle": "Your cart is empty",
+    "emptyDesc": "Your cart is empty. Add some delicious food!",
+    "browseFood": "Browse Food",
+    "clearAll": "Clear All",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "delivery": "Delivery",
+    "total": "Total",
+    "proceed": "Proceed to Payment",
+    "secured": "SECURED BY MSOSI FASTA PAY"
+  },
+  "orders": {
+    "title": "My Orders",
+    "empty": "No orders yet",
+    "emptyDesc": "Your orders will appear here",
+    "status": {
+      "pending": "Pending",
+      "ready": "Ready",
+      "delivered": "Delivered",
+      "cancelled": "Cancelled"
+    }
+  },
+  "search": {
+    "title": "Search",
+    "placeholder": "Search for food or restaurants",
+    "noResults": "No results found",
+    "noResultsDesc": "We couldn't find what you're looking for"
+  },
+  "payment": {
+    "title": "Payment",
+    "success": "Order Received!",
+    "method": "Select Payment Method",
+    "pay": "Pay Now"
+  },
+  "restaurant": {
+    "welcome": "Welcome and enjoy our delicious meals!",
+    "menu": "Menu",
+    "description": "Description"
+  },
+  "food": {
+    "description": "Description",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "defaultDesc": "Delicious meal prepared with professional care and natural ingredients. Welcome to enjoy unique taste from Msosi Fasta."
+  },
+  "navbar": {
+    "home": "Home",
+    "search": "Search",
+    "cart": "Cart",
+    "orders": "Orders",
+    "profile": "Account"
+  }
+}

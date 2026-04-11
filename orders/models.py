@@ -1,4 +1,4 @@
-﻿from django.db import models
+from django.db import models
 from users.models import User
 from restaurants.models import MenuItem
 
@@ -7,6 +7,7 @@ class Order(models.Model):
         ('pending', 'Pending'),
         ('confirmed', 'Confirmed'),
         ('preparing', 'Preparing'),
+        ('ready', 'Ready'),
         ('on_the_way', 'On The Way'),
         ('delivered', 'Delivered'),
         ('cancelled', 'Cancelled'),

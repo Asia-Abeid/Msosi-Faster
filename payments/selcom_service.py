@@ -29,6 +29,7 @@ class SelcomPaymentService:
         'mpesa': 'MPESA',
         'tigo_pesa': 'TIGOPESA',
         'airtel_money': 'AIRTEL',
+        'card': 'CARD',
     }
     
     @classmethod
@@ -39,8 +40,9 @@ class SelcomPaymentService:
     @classmethod
     def _get_request_headers(cls) -> Dict[str, str]:
         """Prepare request headers with authentication"""
+        api_key = getattr(settings, 'SELCOM_API_KEY', '')
         return {
-            'Authorization': f'Bearer {settings.SELCOM_API_KEY}',
+            'Authorization': f'Bearer {api_key}',
             'Content-Type': 'application/json',
             'Accept': 'application/json',
         }
@@ -48,7 +50,8 @@ class SelcomPaymentService:
     @classmethod
     def _generate_hash(cls, data: str) -> str:
         """Generate SHA256 hash for request validation"""
-        hash_string = f"{data}{settings.SELCOM_API_SECRET}"
+        secret = getattr(settings, 'SELCOM_API_SECRET', 'mock_secret')
+        hash_string = f"{data}{secret}"
         return hashlib.sha256(hash_string.encode()).hexdigest()
     
     @classmethod
@@ -63,26 +66,24 @@ class SelcomPaymentService:
     ) -> Tuple[bool, Dict]:
         """
         Initiate payment request to Selcom
-        
-        Args:
-            phone_number: Customer's phone number (format: 255712345678)
-            amount: Payment amount
-            order_id: Your order ID
-            payment_method: 'mpesa', 'tigo_pesa', or 'airtel_money'
-            customer_email: Customer email (optional)
-            customer_name: Customer name (optional)
-        
-        Returns:
-            Tuple of (success: bool, response: dict)
         """
         
         if payment_method not in cls.PAYMENT_METHODS:
             return False, {'error': f'Invalid payment method: {payment_method}'}
         
+        # MOCK MODE: If no API key and in DEBUG mode, return success
+        if (not getattr(settings, 'SELCOM_API_KEY', None) or not getattr(settings, 'SELCOM_MERCHANT_ID', None)) and settings.DEBUG:
+            return True, {
+                'status': 'success',
+                'transaction_id': f'MOCK-TXN-{timezone.now().timestamp()}',
+                'reference_id': f'MOCK-REF-{order_id}',
+                'message': 'Simulation Mode: Payment initiated successfully (No API credentials found)'
+            }
+
         # Prepare request payload
         payload = {
             'merchant_id': settings.SELCOM_MERCHANT_ID,
-            'phone': cls._format_phone_number(phone_number),
+            'phone': cls._format_phone_number(phone_number or '0000000000'),
             'amount': float(amount),
             'order_id': str(order_id),
             'payment_method': cls.PAYMENT_METHODS[payment_method],
