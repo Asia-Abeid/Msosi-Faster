@@ -7,6 +7,7 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
 import { LinearGradient } from 'expo-linear-gradient';
+import i18n from '../../constants/i18n';
 
 const { height } = Dimensions.get('window');
 
@@ -77,16 +78,16 @@ export default function RoleSelectScreen() {
       </View>
 
       <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
-        <Text style={styles.title}>Unaingia kama nani?</Text>
-        <Text style={styles.subtitle}>Chagua aina yako ya akaunti ili tuendelee</Text>
+        <Text style={styles.title}>{i18n.t('roleSelect.whoAreYou')}</Text>
+        <Text style={styles.subtitle}>{i18n.t('roleSelect.chooseAccount')}</Text>
 
         <View style={styles.cards}>
           <RoleCard
             anim={customerAnim}
             icon="fast-food-outline"
-            title="Mteja"
-            description="Agiza chakula kutoka mikahawa mbalimbali karibu nawe."
-            features={['Agiza chakula haraka', 'Fuatilia oda yako', 'Malipo salama']}
+            title={i18n.t('roleSelect.customer.title')}
+            description={i18n.t('roleSelect.customer.desc')}
+            features={i18n.t('roleSelect.customer.features', { returnObjects: true }) as string[]}
             accentColor={Colors.primary}
             bgColor="rgba(196,60,0,0.08)"
             onPress={() => press(customerAnim, '/(auth)/register?role=customer')}
@@ -95,9 +96,9 @@ export default function RoleSelectScreen() {
           <RoleCard
             anim={ownerAnim}
             icon="restaurant-outline"
-            title="Mmiliki wa Mkahawa"
-            description="Simamia mkahawa wako, menyu, na mapato yako."
-            features={['Ongeza menyu yako', 'Simamiwa oda', 'Angalia mapato']}
+            title={i18n.t('roleSelect.owner.title')}
+            description={i18n.t('roleSelect.owner.desc')}
+            features={i18n.t('roleSelect.owner.features', { returnObjects: true }) as string[]}
             accentColor={Colors.secondary}
             bgColor="rgba(255,109,0,0.08)"
             onPress={() => press(ownerAnim, '/(auth)/register?role=owner')}
@@ -106,8 +107,8 @@ export default function RoleSelectScreen() {
 
         <TouchableOpacity onPress={() => router.push('/(auth)/login')} style={styles.footerLink}>
           <Text style={styles.footerTxt}>
-            Una akaunti tayari?{'  '}
-            <Text style={styles.footerBold}>Ingia Sasa</Text>
+            {i18n.t('roleSelect.alreadyHaveAccount')}{'  '}
+            <Text style={styles.footerBold}>{i18n.t('roleSelect.loginNow')}</Text>
           </Text>
         </TouchableOpacity>
       </ScrollView>

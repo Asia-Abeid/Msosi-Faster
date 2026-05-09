@@ -8,26 +8,29 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
 import { ordersApi } from '../../services/api';
+import i18n from '../../constants/i18n';
 
-const TABS = [
-  { id: 'Vyote', label: 'Zote', icon: 'list-outline' },
-  { id: 'Mpya', label: 'Mpya', icon: 'time-outline' },
-  { id: 'Preparing', label: 'Inaandaliwa', icon: 'flame-outline' },
-  { id: 'Tayari', label: 'Tayari', icon: 'bag-check-outline' },
-  { id: 'Zimekamilika', label: 'Historia', icon: 'checkmark-done-outline' },
-];
 
-const STATUS_COLORS: Record<string, { color: string; bg: string; label: string }> = {
-  pending:    { color: '#F59E0B', bg: '#FFF7E6', label: 'Inasubiri' },
-  confirmed:  { color: '#3B82F6', bg: '#EFF6FF', label: 'Imethibitishwa' },
-  preparing:  { color: '#8B5CF6', bg: '#F5F3FF', label: 'Inaandaliwa' },
-  on_the_way: { color: '#F97316', bg: '#FFF7ED', label: 'Njiani' },
-  delivered:  { color: '#10B981', bg: '#ECFDF5', label: 'Imefikia' },
-  cancelled:  { color: '#EF4444', bg: '#FEF2F2', label: 'Imekataliwa' },
-  ready:      { color: '#10B981', bg: '#ECFDF5', label: 'Tayari' },
-};
+
+const getStatusColors = () => ({
+  pending:    { color: '#F59E0B', bg: '#FFF7E6', label: i18n.t('owner.orders.status.pending') },
+  confirmed:  { color: '#3B82F6', bg: '#EFF6FF', label: i18n.t('owner.orders.status.confirmed') },
+  preparing:  { color: '#8B5CF6', bg: '#F5F3FF', label: i18n.t('owner.orders.status.preparing') },
+  on_the_way: { color: '#F97316', bg: '#FFF7ED', label: i18n.t('owner.orders.status.on_the_way') },
+  delivered:  { color: '#10B981', bg: '#ECFDF5', label: i18n.t('owner.orders.status.delivered') },
+  cancelled:  { color: '#EF4444', bg: '#FEF2F2', label: i18n.t('owner.orders.status.cancelled') },
+  ready:      { color: '#10B981', bg: '#ECFDF5', label: i18n.t('owner.orders.status.ready') },
+});
 
 export default function AllOrders() {
+  const tabs = [
+    { id: 'Vyote', label: i18n.t('owner.orders.tabs.all'), icon: 'list-outline' },
+    { id: 'Mpya', label: i18n.t('owner.orders.tabs.new'), icon: 'time-outline' },
+    { id: 'Preparing', label: i18n.t('owner.orders.tabs.preparing'), icon: 'flame-outline' },
+    { id: 'Tayari', label: i18n.t('owner.orders.tabs.ready'), icon: 'bag-check-outline' },
+    { id: 'Zimekamilika', label: i18n.t('owner.orders.tabs.history'), icon: 'checkmark-done-outline' },
+  ];
+
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
@@ -59,7 +62,7 @@ export default function AllOrders() {
     try {
       await ordersApi.updateStatus(id, status);
       fetchOrders();
-    } catch { Alert.alert('Hitilafu', 'Imeshindwa kubadilisha hali ya oda.'); }
+    } catch { Alert.alert(i18n.t('payment.errorTitle'), i18n.t('owner.orders.errorUpdate')); }
   };
 
   return (
@@ -70,8 +73,8 @@ export default function AllOrders() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.headerTitle}>Maagizo Yote</Text>
-            <Text style={styles.headerSub}>{orders.length} oda zimepatikana</Text>
+            <Text style={styles.headerTitle}>{i18n.t('owner.orders.title')}</Text>
+            <Text style={styles.headerSub}>{i18n.t('owner.orders.found', { count: orders.length })}</Text>
           </View>
           <TouchableOpacity style={styles.refreshBtn} onPress={() => { setRefreshing(true); fetchOrders(); }}>
             <Ionicons name="refresh-outline" size={20} color={Colors.primary} />
@@ -80,7 +83,7 @@ export default function AllOrders() {
 
         {/* Filter tabs */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tabScroll} contentContainerStyle={styles.tabContent}>
-          {TABS.map((tab) => (
+          {tabs.map((tab) => (
             <TouchableOpacity
               key={tab.id}
               style={[styles.tab, activeTab === tab.id && styles.tabActive]}
@@ -95,7 +98,7 @@ export default function AllOrders() {
         {loading ? (
           <View style={styles.center}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadTxt}>Inapakia oda...</Text>
+            <Text style={styles.loadTxt}>{i18n.t('owner.orders.loading')}</Text>
           </View>
         ) : (
           <FlatList
@@ -111,8 +114,8 @@ export default function AllOrders() {
                 <View style={styles.emptyIconWrap}>
                   <Ionicons name="receipt-outline" size={32} color={Colors.primary} />
                 </View>
-                <Text style={styles.emptyTitle}>Hakuna Oda</Text>
-                <Text style={styles.emptyDesc}>Hakuna oda katika kichujio hiki</Text>
+                <Text style={styles.emptyTitle}>{i18n.t('owner.orders.empty')}</Text>
+                <Text style={styles.emptyDesc}>{i18n.t('owner.orders.emptyFilter')}</Text>
               </View>
             }
             showsVerticalScrollIndicator={false}
@@ -124,7 +127,7 @@ export default function AllOrders() {
 }
 
 function OrderRow({ order, onStatusChange }: any) {
-  const sc = STATUS_COLORS[order.status] || STATUS_COLORS.pending;
+  const sc = getStatusColors()[order.status as keyof ReturnType<typeof getStatusColors>] || getStatusColors().pending;
 
   return (
     <View style={styles.card}>
@@ -135,7 +138,7 @@ function OrderRow({ order, onStatusChange }: any) {
             <Text style={styles.avatarTxt}>{order.customer_detail?.username?.[0]?.toUpperCase() || 'M'}</Text>
           </View>
           <View>
-            <Text style={styles.customerName}>{order.customer_detail?.username || 'Mteja'}</Text>
+            <Text style={styles.customerName}>{order.customer_detail?.username || i18n.t('owner.orders.customer')}</Text>
             <View style={styles.timeRow}>
               <Ionicons name="time-outline" size={11} color="#AAA" />
               <Text style={styles.orderTime}>
@@ -152,41 +155,41 @@ function OrderRow({ order, onStatusChange }: any) {
       {/* Order ID chip */}
       <View style={styles.orderIdRow}>
         <View style={styles.orderIdChip}>
-          <Text style={styles.orderIdTxt}>ODA #{order.id}</Text>
+          <Text style={styles.orderIdTxt}>{i18n.t('order.orderId', { id: order.id })}</Text>
         </View>
-        <Text style={styles.itemCount}>{order.items?.length || 0} bidhaa</Text>
+        <Text style={styles.itemCount}>{i18n.t('owner.orders.items', { count: order.items?.length || 0 })}</Text>
       </View>
 
       {/* Items */}
       <View style={styles.divider} />
       <Text style={styles.itemSummary} numberOfLines={2}>
-        {order.items?.map((it: any) => `${it.quantity}× ${it.menu_item_detail?.name || 'Chakula'}`).join(' · ') || '—'}
+        {order.items?.map((it: any) => `${it.quantity}× ${it.menu_item_detail?.name || i18n.t('owner.orders.item')}`).join(' · ') || '—'}
       </Text>
       <View style={styles.divider} />
 
       {/* Footer */}
       <View style={styles.cardFooter}>
         <View>
-          <Text style={styles.totalLabel}>Jumla ya Oda</Text>
+          <Text style={styles.totalLabel}>{i18n.t('owner.orders.total')}</Text>
           <Text style={styles.totalValue}>TSh {Number(order.total_price).toLocaleString()}</Text>
         </View>
         <View style={styles.actions}>
           {(order.status === 'pending' || order.status === 'confirmed') && (
             <TouchableOpacity style={styles.btnPrimary} onPress={() => onStatusChange('preparing')}>
               <Ionicons name="flame-outline" size={13} color="#fff" />
-              <Text style={styles.btnTxt}>Andaa</Text>
+              <Text style={styles.btnTxt}>{i18n.t('owner.orders.actions.prepare')}</Text>
             </TouchableOpacity>
           )}
           {order.status === 'preparing' && (
             <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#10B981' }]} onPress={() => onStatusChange('ready')}>
               <Ionicons name="bag-check-outline" size={13} color="#fff" />
-              <Text style={styles.btnTxt}>Tayari</Text>
+              <Text style={styles.btnTxt}>{i18n.t('owner.orders.actions.ready')}</Text>
             </TouchableOpacity>
           )}
           {order.status === 'ready' && (
             <TouchableOpacity style={[styles.btnPrimary, { backgroundColor: '#3B82F6' }]} onPress={() => onStatusChange('on_the_way')}>
               <Ionicons name="bicycle-outline" size={13} color="#fff" />
-              <Text style={styles.btnTxt}>Tuma</Text>
+              <Text style={styles.btnTxt}>{i18n.t('owner.orders.actions.send')}</Text>
             </TouchableOpacity>
           )}
         </View>

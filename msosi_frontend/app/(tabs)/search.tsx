@@ -7,7 +7,8 @@ import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
-import { restaurantsApi, BASE_URL } from '../../services/api';
+import { restaurantsApi, BASE_URL, resolveImageUri } from '../../services/api';
+import i18n from '../../constants/i18n';
 
 const RECENT_KEYWORDS = ['Burger', 'Pizza', 'Nyama', 'Samaki', 'Vinywaji', 'Pilau'];
 
@@ -38,8 +39,8 @@ export default function SearchScreen() {
 
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Tafuta</Text>
-          <Text style={styles.headerSub}>Pata mkahawa au chakula unachotaka</Text>
+          <Text style={styles.headerTitle}>{i18n.t('search.title')}</Text>
+          <Text style={styles.headerSub}>{i18n.t('search.subtitle')}</Text>
         </View>
 
         {/* Search Bar */}
@@ -47,7 +48,7 @@ export default function SearchScreen() {
           <Ionicons name="search-outline" size={20} color={Colors.primary} />
           <TextInput
             style={styles.input}
-            placeholder="Tafuta mkahawa, chakula..."
+            placeholder={i18n.t('search.placeholder')}
             placeholderTextColor="#BABABA"
             value={query}
             onChangeText={(t) => { setQuery(t); doSearch(t); }}
@@ -63,7 +64,7 @@ export default function SearchScreen() {
         {/* Idle state: recent keywords */}
         {!searched && (
           <View style={styles.idle}>
-            <Text style={styles.idleTitle}>Maneno ya Kawaida</Text>
+            <Text style={styles.idleTitle}>{i18n.t('search.commonKeywords')}</Text>
             <View style={styles.keywordsRow}>
               {RECENT_KEYWORDS.map((kw) => (
                 <TouchableOpacity
@@ -82,7 +83,7 @@ export default function SearchScreen() {
         {loading && (
           <View style={styles.center}>
             <ActivityIndicator color={Colors.primary} size="large" />
-            <Text style={styles.loadingTxt}>Inatafuta...</Text>
+            <Text style={styles.loadingTxt}>{i18n.t('search.searching')}</Text>
           </View>
         )}
 
@@ -94,7 +95,7 @@ export default function SearchScreen() {
             showsVerticalScrollIndicator={false}
             ListHeaderComponent={
               <Text style={styles.resultsHeader}>
-                {results.length > 0 ? `${results.length} matokeo kwa "${query}"` : ''}
+                {results.length > 0 ? i18n.t('search.resultsCount', { count: results.length, query }) : ''}
               </Text>
             }
             renderItem={({ item }) => (
@@ -104,7 +105,7 @@ export default function SearchScreen() {
                 activeOpacity={0.85}
               >
                 {item.image
-                  ? <Image source={{ uri: `${BASE_URL.replace('/api', '')}${item.image}` }} style={styles.img} />
+                  ? <Image source={{ uri: resolveImageUri(item.image) as string }} style={styles.img} />
                   : (
                     <View style={styles.imgPlaceholder}>
                       <Ionicons name="restaurant-outline" size={24} color={Colors.primary} />
@@ -120,7 +121,7 @@ export default function SearchScreen() {
                     <Ionicons name="time-outline" size={12} color="#999" />
                     <Text style={styles.metaTxt}>30–45 min</Text>
                     <View style={styles.dot} />
-                    <Text style={styles.freeTxt}>Delivery Bure</Text>
+                    <Text style={styles.freeTxt}>{i18n.t('home.freeDelivery')}</Text>
                   </View>
                 </View>
                 <View style={styles.arrowWrap}>
@@ -133,8 +134,8 @@ export default function SearchScreen() {
                 <View style={styles.emptyIconWrap}>
                   <Ionicons name="search-outline" size={32} color={Colors.primary} />
                 </View>
-                <Text style={styles.emptyTitle}>Hakuna Matokeo</Text>
-                <Text style={styles.emptyDesc}>Hakuna mkahawa wa "{query}". Jaribu neno lingine.</Text>
+                <Text style={styles.emptyTitle}>{i18n.t('search.noResults')}</Text>
+                <Text style={styles.emptyDesc}>{i18n.t('search.noResultsDesc', { query })}</Text>
               </View>
             }
           />

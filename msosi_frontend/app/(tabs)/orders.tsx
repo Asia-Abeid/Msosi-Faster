@@ -9,16 +9,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
 import { ordersApi } from '../../services/api';
+import i18n from '../../constants/i18n';
 
-const STATUS_META: Record<string, { label: string; color: string; bg: string; icon: string }> = {
-  pending:    { label: 'Inasubiri',   color: '#F59E0B', bg: '#FFF7E6', icon: 'time-outline' },
-  confirmed:  { label: 'Imethibitishwa', color: '#3B82F6', bg: '#EFF6FF', icon: 'checkmark-circle-outline' },
-  preparing:  { label: 'Inaandaliwa', color: '#8B5CF6', bg: '#F5F3FF', icon: 'flame-outline' },
-  on_the_way: { label: 'Njiani',      color: '#F97316', bg: '#FFF7ED', icon: 'bicycle-outline' },
-  delivered:  { label: 'Imefikia',    color: '#10B981', bg: '#ECFDF5', icon: 'checkmark-done-outline' },
-  cancelled:  { label: 'Imekataliwa', color: '#EF4444', bg: '#FEF2F2', icon: 'close-circle-outline' },
-  ready:      { label: 'Tayari',      color: '#10B981', bg: '#ECFDF5', icon: 'bag-check-outline' },
-};
+const getStatusMeta = () => ({
+  pending:    { label: i18n.t('orders.status.pending'),   color: '#F59E0B', bg: '#FFF7E6', icon: 'time-outline' },
+  confirmed:  { label: i18n.t('orders.status.confirmed'), color: '#3B82F6', bg: '#EFF6FF', icon: 'checkmark-circle-outline' },
+  preparing:  { label: i18n.t('orders.status.preparing'), color: '#8B5CF6', bg: '#F5F3FF', icon: 'flame-outline' },
+  on_the_way: { label: i18n.t('orders.status.on_the_way'),      color: '#F97316', bg: '#FFF7ED', icon: 'bicycle-outline' },
+  delivered:  { label: i18n.t('orders.status.delivered'),    color: '#10B981', bg: '#ECFDF5', icon: 'checkmark-done-outline' },
+  cancelled:  { label: i18n.t('orders.status.cancelled'), color: '#EF4444', bg: '#FEF2F2', icon: 'close-circle-outline' },
+  ready:      { label: i18n.t('orders.status.ready'),      color: '#10B981', bg: '#ECFDF5', icon: 'bag-check-outline' },
+});
 
 export default function OrdersScreen() {
   const router = useRouter();
@@ -45,8 +46,8 @@ export default function OrdersScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.headerTitle}>Oda Zangu</Text>
-            <Text style={styles.headerSub}>Fuatilia hali ya oda zako</Text>
+            <Text style={styles.headerTitle}>{i18n.t('orders.title')}</Text>
+            <Text style={styles.headerSub}>{i18n.t('orders.subtitle')}</Text>
           </View>
           <TouchableOpacity style={styles.refreshBtn} onPress={() => fetchOrders(true)}>
             <Ionicons name="refresh-outline" size={20} color={Colors.primary} />
@@ -56,7 +57,7 @@ export default function OrdersScreen() {
         {loading ? (
           <View style={styles.center}>
             <ActivityIndicator size="large" color={Colors.primary} />
-            <Text style={styles.loadTxt}>Inapakia oda...</Text>
+            <Text style={styles.loadTxt}>{i18n.t('orders.loading')}</Text>
           </View>
         ) : (
           <FlatList
@@ -72,7 +73,7 @@ export default function OrdersScreen() {
               />
             }
             renderItem={({ item }) => {
-              const meta = STATUS_META[item.status] || STATUS_META.pending;
+              const meta = getStatusMeta()[item.status as keyof ReturnType<typeof getStatusMeta>] || getStatusMeta().pending;
               const date = new Date(item.created_at);
               return (
                 <TouchableOpacity
@@ -83,7 +84,7 @@ export default function OrdersScreen() {
                   {/* Card Header */}
                   <View style={styles.cardHeader}>
                     <View style={styles.orderIdWrap}>
-                      <Text style={styles.orderIdLabel}>ODA</Text>
+                      <Text style={styles.orderIdLabel}>{i18n.t('orders.orderLabel')}</Text>
                       <Text style={styles.orderId}>#{item.id}</Text>
                     </View>
                     <View style={[styles.statusBadge, { backgroundColor: meta.bg }]}>
@@ -96,7 +97,7 @@ export default function OrdersScreen() {
                   <View style={styles.itemsPreview}>
                     <Ionicons name="fast-food-outline" size={14} color="#888" />
                     <Text style={styles.itemsText} numberOfLines={1}>
-                      {item.items?.map((it: any) => `${it.quantity}× ${it.menu_item_detail?.name || 'Chakula'}`).join(', ') || 'Vitu vya oda'}
+                      {item.items?.map((it: any) => `${it.quantity}× ${it.menu_item_detail?.name || i18n.t('orders.itemPlaceholder')}`).join(', ') || i18n.t('orders.itemsPreview')}
                     </Text>
                   </View>
 
@@ -141,8 +142,8 @@ export default function OrdersScreen() {
                 <View style={styles.emptyIconWrap}>
                   <Ionicons name="receipt-outline" size={36} color={Colors.primary} />
                 </View>
-                <Text style={styles.emptyTitle}>Hakuna Oda Bado</Text>
-                <Text style={styles.emptyDesc}>Oda zako zitaonekana hapa baada ya kuagiza chakula.</Text>
+                <Text style={styles.emptyTitle}>{i18n.t('orders.empty')}</Text>
+                <Text style={styles.emptyDesc}>{i18n.t('orders.emptyDesc')}</Text>
                 <TouchableOpacity
                   style={styles.shopBtn}
                   onPress={() => router.push('/(tabs)')}
@@ -150,7 +151,7 @@ export default function OrdersScreen() {
                 >
                   <LinearGradient colors={['#FF6D00', '#C43C00']} style={styles.shopBtnGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                     <Ionicons name="restaurant-outline" size={16} color="#fff" />
-                    <Text style={styles.shopBtnTxt}>Agiza Chakula</Text>
+                    <Text style={styles.shopBtnTxt}>{i18n.t('orders.orderNow')}</Text>
                   </LinearGradient>
                 </TouchableOpacity>
               </View>

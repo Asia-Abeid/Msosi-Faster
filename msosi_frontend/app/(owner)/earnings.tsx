@@ -51,28 +51,34 @@ export default function OwnerEarnings() {
     <SafeAreaView style={styles.container}>
       <ScrollView refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); fetchEarnings(); }} colors={[Colors.primary]} />} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
-          <Text style={styles.title}>Mapato / Earnings</Text>
+          <Text style={styles.title}>{i18n.t('owner.earnings.title')}</Text>
         </View>
 
         <View style={styles.summaryCard}>
           <View style={styles.summaryTop}>
-            <Text style={styles.summaryLabel}>Wiki hii / This Week</Text>
-            <View style={styles.orderBadge}><Text style={styles.orderBadgeTxt}>{data?.order_count || 0} Orders</Text></View>
+            <Text style={styles.summaryLabel}>{i18n.t('owner.earnings.thisWeek')}</Text>
+            <View style={styles.orderBadge}><Text style={styles.orderBadgeTxt}>{i18n.t('owner.earnings.ordersCount', { count: data?.order_count || 0 })}</Text></View>
           </View>
-          <Text style={styles.summaryValue}>TSh {data?.total_earned_this_week?.toLocaleString() || '0'}</Text>
+          <Text style={styles.summaryValue}>TSh {data?.available_balance?.toLocaleString() || '0'}</Text>
+          <Text style={styles.summaryHint}>{i18n.t('owner.earnings.availableBalance')}</Text>
           <TouchableOpacity style={styles.withdrawMainBtn} onPress={() => setWithdrawModal(true)}>
-            <Text style={styles.withdrawBtnTxt}>Toa Pesa / Withdraw</Text>
+            <Text style={styles.withdrawBtnTxt}>{i18n.t('owner.earnings.withdraw')}</Text>
             <Ionicons name="arrow-forward" size={16} color={Colors.primary} />
           </TouchableOpacity>
         </View>
 
         <View style={styles.statsRow}>
-          <StatBox label="Leo" value={`TSh ${data?.total_earned_today?.toLocaleString() || '0'}`} icon="calendar-outline" />
-          <StatBox label="Mwezi Huu" value={`TSh ${data?.total_earned_this_month?.toLocaleString() || '0'}`} icon="receipt-outline" />
+          <StatBox label={i18n.t('owner.earnings.today')} value={`TSh ${data?.total_earned_today?.toLocaleString() || '0'}`} icon="calendar-outline" />
+          <StatBox label={i18n.t('owner.earnings.pending')} value={`TSh ${data?.pending_earnings?.toLocaleString() || '0'}`} icon="hourglass-outline" />
+        </View>
+
+        <View style={styles.statsRow}>
+          <StatBox label={i18n.t('owner.earnings.thisMonth')} value={`TSh ${data?.total_earned_this_month?.toLocaleString() || '0'}`} icon="receipt-outline" />
+          <StatBox label={i18n.t('owner.earnings.inTransit')} value={`${data?.in_transit_count || 0}`} icon="bicycle-outline" />
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Malipo ya Karibuni / Recent Payouts</Text>
+          <Text style={styles.sectionTitle}>{i18n.t('owner.earnings.recentPayouts')}</Text>
           {data?.recent_payouts?.length > 0 ? data.recent_payouts.map((p: any) => (
             <View key={p.id} style={styles.payoutRow}>
               <View style={styles.payoutIconWrap}><Ionicons name="cash-outline" size={20} color={Colors.success} /></View>
@@ -82,7 +88,7 @@ export default function OwnerEarnings() {
               </View>
               <Text style={styles.payoutAmt}>+ TSh {p.amount?.toLocaleString()}</Text>
             </View>
-          )) : <View style={styles.empty}><Text style={styles.emptyTxt}>Hakuna malipo bado</Text></View>}
+          )) : <View style={styles.empty}><Text style={styles.emptyTxt}>{i18n.t('owner.earnings.noPayouts')}</Text></View>}
         </View>
       </ScrollView>
 
@@ -90,17 +96,17 @@ export default function OwnerEarnings() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
              <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>Toa Pesa / Withdraw</Text>
+              <Text style={styles.modalTitle}>{i18n.t('owner.earnings.withdraw')}</Text>
               <TouchableOpacity onPress={() => setWithdrawModal(false)}><Ionicons name="close" size={24} color={Colors.black} /></TouchableOpacity>
             </View>
             <View style={styles.form}>
-              <Text style={styles.withdrawInfo}>Pesa itatumwa kwenye namba yako ya M-Pesa iliyosajiliwa.</Text>
+              <Text style={styles.withdrawInfo}>{i18n.t('owner.earnings.withdrawalInfo')}</Text>
               <View style={styles.inputWrap}>
-                <Text style={styles.inputLabel}>Kiasi / Amount (TSh)</Text>
+                <Text style={styles.inputLabel}>{i18n.t('owner.earnings.amount')}</Text>
                 <TextInput style={styles.input} placeholder="10,000" keyboardType="numeric" value={withdrawAmount} onChangeText={setWithdrawAmount} />
               </View>
               <TouchableOpacity style={styles.submitBtn} onPress={handleWithdraw} disabled={submitting}>
-                {submitting ? <ActivityIndicator color={Colors.white} /> : <Text style={styles.submitBtnTxt}>Thibitisha / Confirm Withdrawal</Text>}
+                {submitting ? <ActivityIndicator color={Colors.white} /> : <Text style={styles.submitBtnTxt}>{i18n.t('owner.earnings.confirmWithdrawal')}</Text>}
               </TouchableOpacity>
             </View>
           </View>
@@ -129,7 +135,8 @@ const styles = StyleSheet.create({
   summaryLabel: { color: 'rgba(255,255,255,0.7)', fontSize: 13, fontWeight: '600' },
   orderBadge: { backgroundColor: 'rgba(255,255,255,0.2)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 6 },
   orderBadgeTxt: { color: Colors.white, fontSize: 11, fontWeight: '800' },
-  summaryValue: { fontSize: 32, fontWeight: '900', color: Colors.white, marginBottom: 24 },
+  summaryValue: { fontSize: 32, fontWeight: '900', color: Colors.white },
+  summaryHint: { color: 'rgba(255,255,255,0.75)', fontSize: 12, fontWeight: '600', marginBottom: 24 },
   withdrawMainBtn: { backgroundColor: Colors.white, paddingVertical: 14, borderRadius: Radius.lg, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 10 },
   withdrawBtnTxt: { color: Colors.primary, fontWeight: '800', fontSize: FontSize.md },
   statsRow: { flexDirection: 'row', paddingHorizontal: Spacing.lg, gap: Spacing.md, marginTop: Spacing.sm },

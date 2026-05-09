@@ -10,7 +10,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
 import { useCart, CartItem } from '../../store/CartContext';
 import { useAuth } from '../../store/AuthContext';
-import { ordersApi, BASE_URL } from '../../services/api';
+import { ordersApi, BASE_URL, resolveImageUri } from '../../services/api';
+import i18n from '../../constants/i18n';
 
 export default function CartScreen() {
   const router = useRouter();
@@ -38,7 +39,7 @@ export default function CartScreen() {
       router.push(`/payment/${res.data.id}?total=${grandTotal}`);
     } catch (e: any) {
       console.error(e);
-      Alert.alert('Hitilafu', 'Imeshindwa kuunda oda. Tafadhali jaribu tena.');
+      Alert.alert(i18n.t('payment.errorTitle'), i18n.t('cart.errorCreate'));
     } finally {
       setSubmitting(false);
     }
@@ -50,18 +51,18 @@ export default function CartScreen() {
         <StatusBar barStyle="dark-content" backgroundColor="#F6F6F6" />
         <SafeAreaView style={{ flex: 1 }} edges={['top']}>
           <View style={styles.headerSimple}>
-            <Text style={styles.headerTitle}>Kikapu Changu</Text>
+            <Text style={styles.headerTitle}>{i18n.t('cart.title')}</Text>
           </View>
           <View style={styles.emptyState}>
             <View style={styles.emptyIconWrap}>
               <Ionicons name="cart-outline" size={44} color={Colors.primary} />
             </View>
-            <Text style={styles.emptyTitle}>Kikapu Chako ni Tupu</Text>
-            <Text style={styles.emptyDesc}>Ongeza chakula kutoka kwa mikahawa inayopendeza ili uendelee.</Text>
+            <Text style={styles.emptyTitle}>{i18n.t('cart.emptyTitle')}</Text>
+            <Text style={styles.emptyDesc}>{i18n.t('cart.emptyDesc')}</Text>
             <TouchableOpacity onPress={() => router.push('/(tabs)')} activeOpacity={0.85} style={styles.shopBtnWrap}>
               <LinearGradient colors={['#FF6D00', '#C43C00']} style={styles.shopBtn} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
                 <Ionicons name="restaurant-outline" size={18} color="#fff" />
-                <Text style={styles.shopBtnTxt}>Tazama Mikahawa</Text>
+                <Text style={styles.shopBtnTxt}>{i18n.t('cart.browseRestaurants')}</Text>
               </LinearGradient>
             </TouchableOpacity>
           </View>
@@ -77,12 +78,12 @@ export default function CartScreen() {
         {/* Header */}
         <View style={styles.header}>
           <View>
-            <Text style={styles.headerTitle}>Kikapu Changu</Text>
-            <Text style={styles.headerSub}>{totalItems} bidhaa · Chakula {items[0]?.restaurantName}</Text>
+            <Text style={styles.headerTitle}>{i18n.t('cart.title')}</Text>
+            <Text style={styles.headerSub}>{i18n.t('cart.items', { count: totalItems })} · {i18n.t('cart.foodFrom', { restaurant: items[0]?.restaurantName })}</Text>
           </View>
           <TouchableOpacity onPress={clearCart} style={styles.clearBtn}>
             <Ionicons name="trash-outline" size={16} color={Colors.error} />
-            <Text style={styles.clearTxt}>Futa Yote</Text>
+            <Text style={styles.clearTxt}>{i18n.t('cart.clearAll')}</Text>
           </TouchableOpacity>
         </View>
 
@@ -101,16 +102,16 @@ export default function CartScreen() {
           )}
           ListFooterComponent={
             <View style={styles.summaryCard}>
-              <Text style={styles.summaryTitle}>Muhtasari wa Oda</Text>
+              <Text style={styles.summaryTitle}>{i18n.t('cart.summary')}</Text>
 
               <View style={styles.summaryRow}>
-                <Text style={styles.summaryLabel}>Jumla ya Chakula</Text>
+                <Text style={styles.summaryLabel}>{i18n.t('cart.subtotal')}</Text>
                 <Text style={styles.summaryValue}>TSh {totalPrice.toLocaleString()}</Text>
               </View>
               <View style={styles.summaryRow}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
                   <Ionicons name="bicycle-outline" size={14} color="#888" />
-                  <Text style={styles.summaryLabel}>Ada ya Usafirishaji</Text>
+                  <Text style={styles.summaryLabel}>{i18n.t('cart.delivery')}</Text>
                 </View>
                 <Text style={styles.summaryValue}>TSh {deliveryFee.toLocaleString()}</Text>
               </View>
@@ -118,7 +119,7 @@ export default function CartScreen() {
               <View style={styles.divider} />
 
               <View style={styles.totalRow}>
-                <Text style={styles.totalLabel}>Jumla Yote</Text>
+                <Text style={styles.totalLabel}>{i18n.t('cart.total')}</Text>
                 <Text style={styles.totalValue}>TSh {grandTotal.toLocaleString()}</Text>
               </View>
             </View>
@@ -134,7 +135,7 @@ export default function CartScreen() {
               ) : (
                 <>
                   <Ionicons name="shield-checkmark-outline" size={18} color="#fff" />
-                  <Text style={styles.checkoutTxt}>Lipia Sasa</Text>
+                  <Text style={styles.checkoutTxt}>{i18n.t('cart.proceed')}</Text>
                   <View style={styles.pricePill}>
                     <Text style={styles.pricePillTxt}>TSh {grandTotal.toLocaleString()}</Text>
                   </View>
@@ -144,7 +145,7 @@ export default function CartScreen() {
           </TouchableOpacity>
           <View style={styles.securedRow}>
             <Ionicons name="lock-closed-outline" size={12} color="#999" />
-            <Text style={styles.securedTxt}>Malipo salama yanasindwa</Text>
+            <Text style={styles.securedTxt}>{i18n.t('cart.secured')}</Text>
           </View>
         </View>
       </SafeAreaView>
@@ -155,7 +156,7 @@ export default function CartScreen() {
 function CartItemRow({ item, onIncrement, onDecrement, onRemove }: {
   item: CartItem; onIncrement: () => void; onDecrement: () => void; onRemove: () => void;
 }) {
-  const imgUri = item.image ? `${BASE_URL.replace('/api', '')}${item.image}` : null;
+  const imgUri = resolveImageUri(item.image);
   return (
     <View style={itemStyles.card}>
       {imgUri

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ScrollView,
-  Switch, Alert,
+  Switch,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -80,7 +80,7 @@ export default function SettingsScreen() {
                     />
                   ) : item.isLang ? (
                     <TouchableOpacity style={styles.langToggle} onPress={toggleLanguage}>
-                      <Text style={styles.langTxt}>{locale === 'sw' ? 'Kiswahili' : 'English'}</Text>
+                      <Text style={styles.langTxt}>{i18n.t('settings.currentLanguage')}</Text>
                       <Ionicons name="swap-horizontal" size={14} color={Colors.primary} />
                     </TouchableOpacity>
                   ) : (
@@ -92,7 +92,7 @@ export default function SettingsScreen() {
           </View>
         ))}
 
-        <Text style={styles.footer}>Msosi Fasta v1.0.0 (Build 20240331)</Text>
+        <Text style={styles.footer}>{i18n.t('settings.version', { version: '1.0.0', build: '20240331' })}</Text>
       </ScrollView>
     </SafeAreaView>
   );

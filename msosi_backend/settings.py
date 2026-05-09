@@ -7,7 +7,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-5#gqap7\\-r!_f9^c+@c3ns78yuo8haxvdtpb43jo9239')
 DEBUG = config('DEBUG', default=True, cast=bool)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='*', cast=Csv())
+DEV_ALLOW_ALL_HOSTS = config('DEV_ALLOW_ALL_HOSTS', default=True, cast=bool)
+ALLOWED_HOSTS = ['*'] if DEBUG and DEV_ALLOW_ALL_HOSTS else config('ALLOWED_HOSTS', default='*', cast=Csv())
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -131,6 +132,17 @@ SELCOM_CALLBACK_URL = config(
 # Stripe Payment Gateway (Credit/Debit Cards)
 STRIPE_API_KEY = config('STRIPE_API_KEY', default='')
 STRIPE_WEBHOOK_SECRET = config('STRIPE_WEBHOOK_SECRET', default='')
+
+# AzamPay Payment Gateway
+AZAMPAY_APP_NAME = config('AZAMPAY_APP_NAME', default='')
+AZAMPAY_CLIENT_ID = config('AZAMPAY_CLIENT_ID', default='')
+AZAMPAY_CLIENT_SECRET = config('AZAMPAY_CLIENT_SECRET', default='')
+AZAMPAY_API_KEY = config('AZAMPAY_API_KEY', default='')
+AZAMPAY_BASE_URL = config('AZAMPAY_BASE_URL', default='https://sandbox.azampay.co.tz')
+AZAMPAY_CALLBACK_URL = config(
+    'AZAMPAY_CALLBACK_URL',
+    default='http://localhost:8000/api/payments/webhook/azampay/'
+)
 
 # Logging Configuration
 LOGGING = {

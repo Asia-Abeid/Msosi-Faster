@@ -9,9 +9,10 @@ import json
 import logging
 
 from .models import Payment
-from .serializers import PaymentSerializer
+from .serializers import PaymentCreateSerializer, PaymentSerializer
 from .selcom_service import SelcomPaymentService
 from orders.models import Order
+from orders.services import auto_deliver_stale_orders
 
 logger = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ class PaymentCreateView(generics.CreateAPIView):
         "payment_method": "mpesa"  # or "tigo_pesa", "airtel_money"
     }
     """
-    serializer_class = PaymentSerializer
+    serializer_class = PaymentCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
@@ -66,10 +67,14 @@ class PaymentCreateView(generics.CreateAPIView):
         
         if success:
             # Payment initiated successfully
-            payment.status = 'pending'
+            is_mock_payment = str(response.get('transaction_id', '')).startswith('MOCK-TXN-')
+            payment.status = 'completed' if is_mock_payment else 'pending'
             payment.transaction_id = response.get('transaction_id')
             payment.selcom_reference = response.get('reference_id')
             payment.save()
+            if is_mock_payment:
+                payment.order.status = 'confirmed'
+                payment.order.save(update_fields=['status', 'updated_at'])
             logger.info(f"Payment {payment.id} initiated with Selcom")
         else:
             # Payment failed
@@ -309,29 +314,46 @@ class EarningsView(generics.GenericAPIView):
     permission_classes = [IsRestaurantOwner]
 
     def get(self, request, *args, **kwargs):
+        auto_deliver_stale_orders()
         user = request.user
         now = timezone.now()
         start_of_day = now.replace(hour=0, minute=0, second=0, microsecond=0)
         start_of_week = start_of_day - timezone.timedelta(days=now.weekday())
         start_of_month = start_of_day.replace(day=1)
 
-        def get_total(start_date):
+        owner_orders = Order.objects.filter(
+            items__menu_item__restaurant__owner=user
+        ).distinct()
+        delivered_orders = owner_orders.filter(status='delivered')
+        pending_orders = owner_orders.filter(
+            status__in=['confirmed', 'preparing', 'ready', 'on_the_way']
+        )
+
+        def get_payment_total(orders):
             return Payment.objects.filter(
-                order__items__menu_item__restaurant__owner=user,
+                order__in=orders,
                 status='completed',
-                created_at__gte=start_date
-            ).distinct().aggregate(total=Sum('amount'))['total'] or 0
+            ).aggregate(total=Sum('amount'))['total'] or 0
+
+        def get_completed_payment_total(orders, start_date=None):
+            payments = Payment.objects.filter(
+                order__in=orders,
+                status='completed',
+            )
+            if start_date:
+                payments = payments.filter(updated_at__gte=start_date)
+            return payments.aggregate(total=Sum('amount'))['total'] or 0
 
         earnings_data = {
-            'total_earned_today': get_total(start_of_day),
-            'total_earned_this_week': get_total(start_of_week),
-            'total_earned_this_month': get_total(start_of_month),
-            'order_count': Order.objects.filter(
-                items__menu_item__restaurant__owner=user,
-                status='delivered' # or any relevant status
-            ).distinct().count(), 
+            'total_earned_today': get_completed_payment_total(delivered_orders, start_of_day),
+            'total_earned_this_week': get_completed_payment_total(delivered_orders, start_of_week),
+            'total_earned_this_month': get_completed_payment_total(delivered_orders, start_of_month),
+            'available_balance': get_payment_total(delivered_orders),
+            'pending_earnings': get_payment_total(pending_orders),
+            'in_transit_count': pending_orders.filter(status='on_the_way').count(),
+            'order_count': delivered_orders.count(),
             'recent_payouts': Payment.objects.filter(
-                order__items__menu_item__restaurant__owner=user,
+                order__in=delivered_orders,
                 status='completed'
             ).distinct().order_by('-created_at')[:10]
         }

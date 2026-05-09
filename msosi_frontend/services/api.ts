@@ -8,6 +8,11 @@ const debuggerHost = Constants.expoConfig?.hostUri;
 const detectedIp = debuggerHost ? debuggerHost.split(':')[0] : 'localhost';
 export const BASE_URL = `http://${detectedIp}:8000/api`;
 
+export const resolveImageUri = (uri: string | null | undefined) => {
+  if (!uri) return null;
+  return uri.startsWith('http') ? uri : `${BASE_URL.replace('/api', '')}${uri}`;
+};
+
 console.log("Dynamically Resolved API URL:", BASE_URL);
 const api = axios.create({
   baseURL: BASE_URL,
@@ -148,6 +153,7 @@ export const ordersApi = {
   getIncomingOrders: () => api.get('/orders/restaurant/incoming/'),
   getAllOrders: () => api.get('/orders/restaurant/all/'),
   updateStatus: (id: number, status: string) => api.patch(`/orders/${id}/status/`, { status }),
+  confirmReceived: (id: number) => api.post(`/orders/${id}/confirm-received/`),
 };
 
 // ─── Payments ───────────────────────────────────────────────
