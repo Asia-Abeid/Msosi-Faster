@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius, Shadow } from '../../constants/colors';
-import { restaurantsApi, BASE_URL } from '../../services/api';
+import { restaurantsApi, BASE_URL, resolveImageUri } from '../../services/api';
 import { useCart } from '../../store/CartContext';
 import i18n from '../../constants/i18n';
 
@@ -58,7 +58,7 @@ export default function RestaurantDetailScreen() {
     );
   }
 
-  const bannerUri = restaurant?.image ? `${BASE_URL.replace('/api', '')}${restaurant.image}` : null;
+  const bannerUri = resolveImageUri(restaurant?.image);
 
   return (
     <View style={styles.container}>
@@ -155,7 +155,7 @@ export default function RestaurantDetailScreen() {
 }
 
 function MenuCard({ item, restaurantId, restaurantName, quantity, onAdd, onPress }: any) {
-  const imgUri = item.image ? `${BASE_URL.replace('/api', '')}${item.image}` : null;
+  const imgUri = resolveImageUri(item.image);
   return (
     <TouchableOpacity style={styles.menuCard} onPress={onPress}>
       <View style={styles.menuInfo}>

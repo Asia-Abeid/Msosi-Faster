@@ -1,5 +1,4 @@
-from rest_framework import generics, status, permissions
-from rest_framework.response import Response
+from rest_framework import generics, permissions, filters
 from .models import Restaurant, MenuItem
 from .serializers import RestaurantSerializer, MenuItemSerializer
 from msosi_backend.permissions import IsRestaurantOwner
@@ -32,18 +31,7 @@ class MenuItemCreateUpdate(generics.RetrieveUpdateDestroyAPIView, generics.Creat
     def get_queryset(self):
         return MenuItem.objects.filter(restaurant__owner=self.request.user)
 
-class FoodDetail(generics.RetrieveAPIView):
-    """
-    Customer view: Detail of any available menu item.
-    """
-    queryset = MenuItem.objects.filter(is_available=True)
-    serializer_class = MenuItemSerializer
-    permission_classes = [permissions.AllowAny]
-
     def perform_create(self, serializer):
-        # We assume the user has at least one restaurant. 
-        # If multiple, let them choose. In a simple case, pick the first.
-        # Ideally, we'd pass restaurant ID in the request.
         restaurant_id = self.request.data.get('restaurant')
         if restaurant_id:
             restaurant = Restaurant.objects.filter(id=restaurant_id, owner=self.request.user).first()
@@ -59,14 +47,24 @@ class FoodDetail(generics.RetrieveAPIView):
             )
         serializer.save(restaurant=restaurant)
 
-from rest_framework import generics, status, permissions, filters
+class FoodDetail(generics.RetrieveAPIView):
+    """
+    Customer view: Detail of any available menu item.
+    """
+    queryset = MenuItem.objects.filter(is_available=True)
+    serializer_class = MenuItemSerializer
+    permission_classes = [permissions.AllowAny]
 
 class RestaurantList(generics.ListCreateAPIView):
     queryset = Restaurant.objects.filter(is_active=True)
     serializer_class = RestaurantSerializer
-    permission_classes = [permissions.AllowAny]
     filter_backends = [filters.SearchFilter]
     search_fields = ['name', 'description']
+
+    def get_permissions(self):
+        if self.request.method == 'POST':
+            return [IsRestaurantOwner()]
+        return [permissions.AllowAny()]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)

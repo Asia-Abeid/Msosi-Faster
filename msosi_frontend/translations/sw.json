@@ -16,24 +16,34 @@
   },
   "roleSelect": {
     "title": "Karibu",
-    "subtitle": "Chagua safari yako ili kuendelea",
+    "whoAreYou": "Unaingia kama nani?",
+    "chooseAccount": "Chagua aina yako ya akaunti ili tuendelee",
     "customer": {
       "title": "Mteja",
-      "desc": "Agiza chakula kitamu kutoka mikahawa mbalimbali"
+      "desc": "Agiza chakula kutoka mikahawa mbalimbali karibu nawe.",
+      "features": ["Agiza chakula haraka", "Fuatilia oda yako", "Malipo salama"]
     },
     "owner": {
       "title": "Mmiliki wa Mkahawa",
-      "desc": "Ongeza biashara yako na ufikie wateja wengi"
+      "desc": "Simamia mkahawa wako, menyu, na mapato yako.",
+      "features": ["Ongeza menyu yako", "Simamiwa oda", "Angalia mapato"]
     },
-    "alreadyHaveAccount": "Tayari una akaunti?"
+    "alreadyHaveAccount": "Una akaunti tayari?",
+    "loginNow": "Ingia Sasa"
   },
   "login": {
     "title": "Ingia",
-    "subtitle": "Karibu tena Msosi Fasta",
-    "username": "JINA LA MTUMIAJI",
-    "password": "NYWILA",
-    "usernamePlaceholder": "Ingiza jina lako",
-    "noAccount": "Huna akaunti?"
+    "welcomeBack": "Karibu Tena! 👋",
+    "subtitle": "Ingia kuendelea na oda zako",
+    "formTitle": "Ingia",
+    "formSubtitle": "Jaza jina la mtumiaji na nywila yako",
+    "usernameLabel": "Jina la Mtumiaji",
+    "passwordLabel": "Nywila",
+    "forgotPassword": "Umesahau Nywila?",
+    "loginBtn": "Ingia",
+    "noAccount": "Huna akaunti?",
+    "joinFree": "Jiunge Bure",
+    "errorAllFields": "Tafadhali jaza sehemu zote"
   },
   "register": {
     "title": "Tengeneza Akaunti",
@@ -46,12 +56,35 @@
   },
   "home": {
     "greeting": "Habari",
-    "morning": "Habari za asubuhi",
-    "afternoon": "Habari za mchana",
-    "evening": "Habari za jioni",
-    "searchPlaceholder": "Tafuta chakula au mikahawa",
+    "morning": "Habari za Asubuhi",
+    "afternoon": "Habari za Mchana",
+    "evening": "Habari za Jioni",
+    "searchPlaceholder": "Tafuta mkahawa au chakula...",
     "nearby": "Mikahawa Karibu Nawe",
-    "resultsFor": "Matokeo ya \"%{search}\""
+    "openNow": "Mikahawa Wazi",
+    "resultsFor": "Matokeo: \"%{search}\"",
+    "restaurantsCount": "%{count} mkahawa",
+    "loading": "Inapakia mikahawa...",
+    "closed": "Imefungwa",
+    "freeDelivery": "Usafirishaji Bure",
+    "deliveryTime": "dakika 30-45",
+    "view": "Tazama",
+    "viewMyCart": "Angalia Kikapu changu",
+    "welcomePromo": "Karibu Msosi Fasta!",
+    "promoDesc": "Pata chakula bora, haraka iwezekanavyo",
+    "defaultDesc": "Karibu kula kwetu!",
+    "noResults": "Hakuna Matokeo",
+    "noResultsDesc": "Hakuna mkahawa wa \"%{search}\"",
+    "noRestaurants": "Hakuna Mikahawa",
+    "noRestaurantsDesc": "Mikahawa itaonekana hapa baada ya kusajiliwa",
+    "categories": {
+      "all": "Vyote",
+      "local": "Vyakula vya Nyumbani",
+      "drinks": "Vinywaji",
+      "snacks": "Vitafunio",
+      "meat": "Nyama",
+      "fish": "Samaki"
+    }
   },
   "settings": {
     "title": "Mipangilio",
@@ -64,14 +97,16 @@
     "locationSub": "Matokeo bora ya mikahawa",
     "language": "LUGHA NA ENEO",
     "appLanguage": "Lugha ya Programu",
-    "appLanguageSub": "Kiswahili / English",
+    "appLanguageSub": "Chagua lugha unayopendelea",
+    "currentLanguage": "Kiswahili",
     "support": "MSAADA NA USALAMA",
     "privacy": "Sera ya Faragha",
     "privacySub": "Jinsi tunavyotumia data zako",
     "password": "Badilisha Nywila",
     "passwordSub": "Sasisha usalama",
     "deleteAccount": "Futa Akaunti",
-    "deleteAccountSub": "Hatua ya kudumu"
+    "deleteAccountSub": "Hatua ya kudumu",
+    "version": "Msosi Fasta toleo %{version} (Build %{build})"
   },
   "profile": {
     "myOrders": "Maagizo Yangu",
@@ -84,45 +119,67 @@
       "orders": "Maagizo",
       "reviews": "Tathmini",
       "points": "Pointi"
+    },
+    "owner": {
+      "restaurantInfo": "Maelezo ya Mkahawa",
+      "payoutSettings": "Mipangilio ya Malipo"
     }
   },
   "cart": {
-    "title": "Kikapu",
+    "title": "Kikapu Changu",
     "viewCart": "Angalia Kikapu",
     "addToCart": "Weka Kikapuni",
-    "emptyTitle": "Kikapu chako kipo tupu",
-    "emptyDesc": "Kikapu chako kipo tupu. Ongeza chakula kitamu sasa!",
-    "browseFood": "Tafuta Chakula",
+    "emptyTitle": "Kikapu Chako ni Tupu",
+    "emptyDesc": "Ongeza chakula kutoka kwa mikahawa inayopendeza ili uendelee.",
+    "browseRestaurants": "Tazama Mikahawa",
     "clearAll": "Futa Yote",
-    "summary": "Muhtasari",
-    "subtotal": "Chakula",
-    "delivery": "Usafirishaji",
-    "total": "Jumla",
+    "summary": "Muhtasari wa Oda",
+    "subtotal": "Jumla ya Chakula",
+    "delivery": "Ada ya Usafirishaji",
+    "total": "Jumla Yote",
     "proceed": "Lipia Sasa",
-    "secured": "SECURED BY MSOSI FASTA PAY"
+    "secured": "Malipo salama yanasindwa",
+    "items": "bidhaa %{count}",
+    "foodFrom": "Chakula kutoka %{restaurant}",
+    "errorCreate": "Imeshindwa kuunda oda. Tafadhali jaribu tena."
   },
   "orders": {
-    "title": "Maagizo Yangu",
-    "empty": "Hujafanya agizo lolote",
-    "emptyDesc": "Maagizo yako yataonekana hapa",
+    "title": "Oda Zangu",
+    "subtitle": "Fuatilia hali ya oda zako",
+    "loading": "Inapakia oda...",
+    "orderLabel": "ODA",
+    "itemPlaceholder": "Chakula",
+    "itemsPreview": "Vitu vya oda",
+    "empty": "Hakuna Oda Bado",
+    "emptyDesc": "Oda zako zitaonekana hapa baada ya kuagiza chakula.",
+    "orderNow": "Agiza Chakula",
     "status": {
-      "pending": "Linashughulikiwa",
-      "ready": "Tayari",
-      "delivered": "Limefika",
-      "cancelled": "Limeghairiwa"
+      "pending": "Inasubiri",
+      "confirmed": "Imethibitishwa",
+      "preparing": "Inaandaliwa",
+      "on_the_way": "Njiani",
+      "delivered": "Imefikia",
+      "cancelled": "Imekataliwa",
+      "ready": "Tayari"
     }
   },
   "search": {
     "title": "Tafuta",
-    "placeholder": "Tafuta chakula au mikahawa",
-    "noResults": "Hakuna matokeo",
-    "noResultsDesc": "Hatujapata ulichokuwa unatafuta"
+    "subtitle": "Pata mkahawa au chakula unachotaka",
+    "placeholder": "Tafuta mkahawa, chakula...",
+    "commonKeywords": "Maneno ya Kawaida",
+    "searching": "Inatafuta...",
+    "resultsCount": "%{count} matokeo kwa \"%{query}\"",
+    "noResults": "Hakuna Matokeo",
+    "noResultsDesc": "Hakuna mkahawa wa \"%{query}\". Jaribu neno lingine."
   },
   "payment": {
     "title": "Malipo",
     "success": "Agizo Limepokelewa!",
     "method": "Chagua Njia ya Malipo",
-    "pay": "Lipia Sasa"
+    "pay": "Lipia Sasa",
+    "errorTitle": "Hitilafu",
+    "errorDesc": "Imeshindwa kuanzisha malipo. Jaribu tena baadae."
   },
   "restaurant": {
     "welcome": "Karibu ufurahie chakula kitamu!",
@@ -141,5 +198,83 @@
     "cart": "Kikapu",
     "orders": "Maagizo",
     "profile": "Akaunti"
+  },
+  "order": {
+    "pending": "Agizo limepokelewa",
+    "confirmed": "Imethibitishwa",
+    "preparing": "Inatayarishwa",
+    "onTheWay": "Ipo njiani",
+    "delivered": "Imefikia",
+    "trackOrder": "Fuatilia Agizo",
+    "orderId": "AGIZO #%{id}",
+    "needHelp": "Unahitaji Msaada?",
+    "currently": "SASA HIVI",
+    "confirmReceived": "Thibitisha Umepokea",
+    "receivedTitle": "Agizo Limekamilika",
+    "receivedMessage": "Asante. Agizo lako limewekwa kama limepokelewa.",
+    "receivedError": "Imeshindwa kuthibitisha kupokea. Tafadhali jaribu tena."
+  },
+  "owner": {
+    "menu": {
+      "title": "Orodha ya Menu",
+      "add": "Ongeza",
+      "selectPhoto": "Chagua picha",
+      "name": "Jina",
+      "price": "Bei (TSh)",
+      "desc": "Maelezo",
+      "save": "Hifadhi",
+      "editTitle": "Hariri Chakula",
+      "addTitle": "Ongeza Chakula Kipya"
+    },
+    "earnings": {
+      "title": "Mapato",
+      "thisWeek": "Wiki hii",
+      "today": "Leo",
+      "thisMonth": "Mwezi huu",
+      "availableBalance": "Inapatikana baada ya mteja kuthibitisha au mfumo kukamilisha",
+      "pending": "Inasubiri",
+      "inTransit": "Njiani",
+      "withdraw": "Toa Pesa",
+      "recentPayouts": "Malipo ya Karibuni",
+      "amount": "Kiasi (TSh)",
+      "confirmWithdrawal": "Thibitisha",
+      "ordersCount": "Maagizo %{count}",
+      "noPayouts": "Hakuna malipo bado",
+      "withdrawalInfo": "Pesa itatumwa kwenye namba yako ya M-Pesa iliyosajiliwa."
+    },
+    "orders": {
+      "title": "Maagizo Yote",
+      "found": "oda %{count} zimepatikana",
+      "loading": "Inapakia oda...",
+      "empty": "Hakuna Oda",
+      "emptyFilter": "Hakuna oda katika kichujio hiki",
+      "customer": "Mteja",
+      "items": "bidhaa %{count}",
+      "item": "Chakula",
+      "total": "Jumla ya Oda",
+      "errorUpdate": "Imeshindwa kubadilisha hali ya oda.",
+      "tabs": {
+        "all": "Zote",
+        "new": "Mpya",
+        "preparing": "Inaandaliwa",
+        "ready": "Tayari",
+        "history": "Historia"
+      },
+      "actions": {
+        "prepare": "Andaa",
+        "ready": "Tayari",
+        "send": "Tuma"
+      },
+      "status": {
+        "pending": "Inasubiri",
+        "confirmed": "Imethibitishwa",
+        "preparing": "Inaandaliwa",
+        "on_the_way": "Njiani",
+        "delivered": "Imefikia",
+        "cancelled": "Imekataliwa",
+        "ready": "Tayari"
+      }
+    }
   }
 }
+

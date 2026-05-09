@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius, Shadow } from '../../constants/colors';
 import { useAuth } from '../../store/AuthContext';
-import { BASE_URL } from '../../services/api';
+import { BASE_URL, resolveImageUri } from '../../services/api';
 
 import i18n from '../../constants/i18n';
 
@@ -32,13 +32,13 @@ export default function ProfileScreen() {
     ]);
   };
 
-  const avatarUri = user?.profile_picture
-    ? `${BASE_URL.replace('/api', '')}${user.profile_picture}`
+  const avatarUri = user?.profile_picture 
+    ? resolveImageUri(user.profile_picture)
     : null;
 
   const menuItems = user?.is_restaurant_owner ? [
-    { icon: 'business-outline',       label: 'Maelezo ya Mkahawa / Restaurant Info', onPress: () => {} },
-    { icon: 'card-outline',           label: 'Mipangilio ya Malipo / Payout Settings', onPress: () => router.push('/(owner)/earnings') },
+    { icon: 'business-outline',       label: i18n.t('profile.owner.restaurantInfo'), onPress: () => {} },
+    { icon: 'card-outline',           label: i18n.t('profile.owner.payoutSettings'), onPress: () => router.push('/(owner)/earnings') },
     { icon: 'settings-outline',       label: i18n.t('settings.title'),           onPress: () => router.push('/settings') },
     { icon: 'help-circle-outline',    label: i18n.t('profile.help'),         onPress: () => {} },
     { icon: 'information-circle-outline', label: i18n.t('profile.about'),    onPress: () => {} },

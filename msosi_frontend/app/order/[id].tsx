@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   View, Text, StyleSheet, ScrollView, TouchableOpacity,
-  ActivityIndicator, Dimensions,
+  ActivityIndicator, Alert,
 } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius, Shadow } from '../../constants/colors';
 import { ordersApi } from '../../services/api';
+import i18n from '../../constants/i18n';
 
 const STEP_ICONS: Record<string, string> = {
   pending:    'time-outline',
@@ -31,6 +32,7 @@ export default function OrderTrackingScreen() {
   const router = useRouter();
   const [order, setOrder] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [confirming, setConfirming] = useState(false);
 
   useEffect(() => {
     const fetchOrder = async () => {
@@ -61,6 +63,20 @@ export default function OrderTrackingScreen() {
   const currentStatus = order?.status;
   const steps = ['pending', 'confirmed', 'preparing', 'on_the_way', 'delivered'];
   const currentStepIndex = steps.indexOf(currentStatus);
+
+  const confirmReceived = async () => {
+    if (!order?.id) return;
+    setConfirming(true);
+    try {
+      const res = await ordersApi.confirmReceived(order.id);
+      setOrder(res.data);
+      Alert.alert(i18n.t('order.receivedTitle'), i18n.t('order.receivedMessage'));
+    } catch {
+      Alert.alert(i18n.t('payment.errorTitle'), i18n.t('order.receivedError'));
+    } finally {
+      setConfirming(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container} edges={['top']}>
@@ -124,6 +140,31 @@ export default function OrderTrackingScreen() {
           ))}
         </View>
 
+        {currentStatus === 'on_the_way' && (
+          <TouchableOpacity
+            style={styles.confirmBtn}
+            onPress={confirmReceived}
+            disabled={confirming}
+            activeOpacity={0.88}
+          >
+            <LinearGradient
+              colors={['#10B981', '#059669']}
+              style={styles.confirmBtnGrad}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 0 }}
+            >
+              {confirming ? (
+                <ActivityIndicator color={Colors.white} />
+              ) : (
+                <>
+                  <Ionicons name="checkmark-circle-outline" size={18} color={Colors.white} />
+                  <Text style={styles.confirmBtnText}>{i18n.t('order.confirmReceived')}</Text>
+                </>
+              )}
+            </LinearGradient>
+          </TouchableOpacity>
+        )}
+
         <TouchableOpacity 
           style={styles.helpBtn}
           onPress={() => { /* Open Support Chat */ }}
@@ -178,6 +219,9 @@ const styles = StyleSheet.create({
   itemQty: { color: Colors.primary, fontWeight: '700', fontSize: FontSize.sm, width: 30 },
   itemName: { flex: 1, color: Colors.tertiary, fontSize: FontSize.sm },
   itemPrice: { color: Colors.gray, fontSize: FontSize.sm },
+  confirmBtn: { borderRadius: Radius.lg, overflow: 'hidden', marginBottom: Spacing.md, ...Shadow.md },
+  confirmBtnGrad: { paddingVertical: 16, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', gap: 8 },
+  confirmBtnText: { color: Colors.white, fontSize: FontSize.md, fontWeight: '800' },
   helpBtn: { padding: 15, alignItems: 'center', borderRadius: Radius.lg, borderWidth: 1, borderColor: Colors.primary, marginBottom: 30 },
   helpBtnText: { color: Colors.primary, fontWeight: '700', fontSize: 15 },
   // Timeline Step Styles

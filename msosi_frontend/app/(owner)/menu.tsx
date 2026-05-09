@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image, Switch, Moda
 import * as ImagePicker from 'expo-image-picker';
 import { Ionicons } from '@expo/vector-icons';
 import { Colors, FontSize, Spacing, Radius, Shadow } from '../../constants/colors';
-import { restaurantsApi, BASE_URL } from '../../services/api';
+import { restaurantsApi, BASE_URL, resolveImageUri } from '../../services/api';
 import i18n from '../../constants/i18n';
 
 const CATEGORIES = ['Fast Food', 'Local', 'Drinks', 'Snacks', 'Meat', 'Fish'];
@@ -53,10 +53,10 @@ export default function MenuManagement() {
     data.append('name', formData.name);
     data.append('price', formData.price);
     data.append('description', formData.description);
-    if (formData.image?.uri) {
+    if (formData.image?.uri && !formData.image.uri.startsWith('http')) {
       const uri = formData.image.uri;
-      const name = uri.split('/').pop();
-      const type = `image/${name?.split('.').pop()}`;
+      const name = uri.split('/').pop() || 'image.jpg';
+      const type = `image/${name.split('.').pop()}`;
       data.append('image', { uri, name, type } as any);
     }
 
@@ -74,17 +74,18 @@ export default function MenuManagement() {
 
   const openEdit = (item: any) => {
     setEditingItem(item);
-    setFormData({ name: item.name, price: String(item.price), description: item.description || '', image: { uri: item.image ? `${BASE_URL.replace('/api', '')}${item.image}` : null } });
+    const imgUri = resolveImageUri(item.image);
+    setFormData({ name: item.name, price: String(item.price), description: item.description || '', image: { uri: imgUri } });
     setModalVisible(true);
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <Text style={styles.title}>Orodha ya Menu / Menu Items</Text>
+        <Text style={styles.title}>{i18n.t('owner.menu.title')}</Text>
         <TouchableOpacity style={styles.addBtn} onPress={() => { setEditingItem(null); setFormData({ name: '', price: '', description: '', image: null }); setModalVisible(true); }}>
           <Ionicons name="add" size={20} color={Colors.white} />
-          <Text style={styles.addBtnText}>Ongeza / Add</Text>
+          <Text style={styles.addBtnText}>{i18n.t('owner.menu.add')}</Text>
         </TouchableOpacity>
       </View>
 
@@ -95,12 +96,12 @@ export default function MenuManagement() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <TouchableOpacity style={styles.card} onPress={() => openEdit(item)}>
-              <Image source={{ uri: item.image ? `${BASE_URL.replace('/api', '')}${item.image}` : 'https://via.placeholder.com/150' }} style={styles.img} />
+              <Image source={{ uri: resolveImageUri(item.image) || 'https://via.placeholder.com/150' }} style={styles.img} />
               <View style={styles.body}>
                 <Text style={styles.name}>{item.name}</Text>
                 <Text style={styles.price}>TSh {Number(item.price).toLocaleString()}</Text>
                 <View style={styles.row}>
-                  <Text style={styles.availText}>{item.is_available ? 'Inapatikana' : 'Hapatikani'}</Text>
+                  <Text style={styles.availText}>{item.is_available ? i18n.t('food.available') : i18n.t('food.unavailable')}</Text>
                   <Switch value={item.is_available} onValueChange={(v) => toggleAvailability(item.id, v)} />
                 </View>
               </View>
@@ -113,20 +114,20 @@ export default function MenuManagement() {
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>{editingItem ? 'Edit Dish' : 'Add New Dish'}</Text>
+              <Text style={styles.modalTitle}>{editingItem ? i18n.t('owner.menu.editTitle') : i18n.t('owner.menu.addTitle')}</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}><Ionicons name="close" size={24} color={Colors.black} /></TouchableOpacity>
             </View>
             <ScrollView style={styles.form}>
               <TouchableOpacity style={styles.imgPicker} onPress={pickImage}>
                 {formData.image?.uri ? <Image source={{ uri: formData.image.uri }} style={styles.pickedImg} /> : <Ionicons name="camera" size={32} color={Colors.gray} />}
-                <Text style={styles.pickerTxt}>Chagua picha / Select Photo</Text>
+                <Text style={styles.pickerTxt}>{i18n.t('owner.menu.selectPhoto')}</Text>
               </TouchableOpacity>
-              <Input label="Jina / Name" placeholder="Burger" value={formData.name} onChangeText={(v: string) => setFormData({ ...formData, name: v })} />
-              <Input label="Bei / Price (TSh)" placeholder="5000" keyboardType="numeric" value={formData.price} onChangeText={(v: string) => setFormData({ ...formData, price: v })} />
-              <Input label="Maelezo / Description" placeholder="Maelezo kidogo..." multiline value={formData.description} onChangeText={(v: string) => setFormData({ ...formData, description: v })} />
+              <Input label={i18n.t('owner.menu.name')} placeholder="Burger" value={formData.name} onChangeText={(v: string) => setFormData({ ...formData, name: v })} />
+              <Input label={i18n.t('owner.menu.price')} placeholder="5000" keyboardType="numeric" value={formData.price} onChangeText={(v: string) => setFormData({ ...formData, price: v })} />
+              <Input label={i18n.t('owner.menu.desc')} placeholder="Maelezo kidogo..." multiline value={formData.description} onChangeText={(v: string) => setFormData({ ...formData, description: v })} />
               
               <TouchableOpacity style={[styles.saveBtn, (!formData.name || !formData.price) && { opacity: 0.5 }]} disabled={submitting || !formData.name || !formData.price} onPress={handleSave}>
-                {submitting ? <ActivityIndicator color={Colors.white} /> : <Text style={styles.saveBtnText}>Hifadhi / Save Dish</Text>}
+                {submitting ? <ActivityIndicator color={Colors.white} /> : <Text style={styles.saveBtnText}>{i18n.t('owner.menu.save')}</Text>}
               </TouchableOpacity>
             </ScrollView>
           </View>

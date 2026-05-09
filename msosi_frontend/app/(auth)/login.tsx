@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius } from '../../constants/colors';
 import { useAuth } from '../../store/AuthContext';
+import i18n from '../../constants/i18n';
 
 const { height } = Dimensions.get('window');
 
@@ -50,14 +51,14 @@ export default function LoginScreen() {
 
   const handleLogin = async () => {
     if (!username || !password) {
-      Alert.alert('Hitilafu', 'Tafadhali jaza sehemu zote');
+      Alert.alert(i18n.t('payment.errorTitle'), i18n.t('login.errorAllFields'));
       return;
     }
     setLoading(true);
     try {
       await login(username.trim(), password);
     } catch (e: any) {
-      Alert.alert('Hitilafu', e?.response?.data?.detail || 'Nywila au jina la mtumiaji si sahihi.');
+      Alert.alert(i18n.t('payment.errorTitle'), e?.response?.data?.detail || 'Nywila au jina la mtumiaji si sahihi.');
     } finally {
       setLoading(false);
     }
@@ -82,8 +83,8 @@ export default function LoginScreen() {
           <Ionicons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
         <View style={styles.heroContent}>
-          <Text style={styles.heroTitle}>Karibu Tena! 👋</Text>
-          <Text style={styles.heroSubtitle}>Ingia kuendelea na oda zako</Text>
+          <Text style={styles.heroTitle}>{i18n.t('login.welcomeBack')}</Text>
+          <Text style={styles.heroSubtitle}>{i18n.t('login.subtitle')}</Text>
         </View>
       </LinearGradient>
 
@@ -94,12 +95,12 @@ export default function LoginScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.formCard}>
-          <Text style={styles.formTitle}>Ingia</Text>
-          <Text style={styles.formSubtitle}>Jaza jina la mtumiaji na nywila yako</Text>
+          <Text style={styles.formTitle}>{i18n.t('login.formTitle')}</Text>
+          <Text style={styles.formSubtitle}>{i18n.t('login.formSubtitle')}</Text>
 
           <View style={styles.fields}>
             <InputField
-              label="Jina la Mtumiaji"
+              label={i18n.t('login.usernameLabel')}
               icon="person-outline"
               placeholder="johndoe"
               value={username}
@@ -108,7 +109,7 @@ export default function LoginScreen() {
             />
 
             <InputField
-              label="Nywila"
+              label={i18n.t('login.passwordLabel')}
               icon="lock-closed-outline"
               placeholder="••••••••"
               value={password}
@@ -127,7 +128,7 @@ export default function LoginScreen() {
             onPress={() => router.push('/(auth)/forgot-password')}
             style={styles.forgotBtn}
           >
-            <Text style={styles.forgotTxt}>Umesahau Nywila?</Text>
+            <Text style={styles.forgotTxt}>{i18n.t('login.forgotPassword')}</Text>
           </TouchableOpacity>
 
           {/* Login button */}
@@ -146,7 +147,7 @@ export default function LoginScreen() {
               {loading
                 ? <ActivityIndicator color="#fff" />
                 : <>
-                    <Text style={styles.submitTxt}>Ingia</Text>
+                    <Text style={styles.submitTxt}>{i18n.t('login.loginBtn')}</Text>
                     <Ionicons name="arrow-forward" size={18} color="#fff" />
                   </>
               }
@@ -159,8 +160,8 @@ export default function LoginScreen() {
             style={styles.registerLink}
           >
             <Text style={styles.registerTxt}>
-              Huna akaunti?{'  '}
-              <Text style={styles.registerBold}>Jiunge Bure</Text>
+              {i18n.t('login.noAccount')}{'  '}
+              <Text style={styles.registerBold}>{i18n.t('login.joinFree')}</Text>
             </Text>
           </TouchableOpacity>
         </View>

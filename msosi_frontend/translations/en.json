@@ -16,24 +16,34 @@
   },
   "roleSelect": {
     "title": "Welcome",
-    "subtitle": "Select your journey to continue",
+    "whoAreYou": "Who are you signing in as?",
+    "chooseAccount": "Choose your account type to continue",
     "customer": {
       "title": "Customer",
-      "desc": "Order exquisite meals from curated restaurants"
+      "desc": "Order from various restaurants near you.",
+      "features": ["Order food fast", "Track your order", "Secure payments"]
     },
     "owner": {
-      "title": "Restaurant Partner",
-      "desc": "Manage your menu and grow your business"
+      "title": "Restaurant Owner",
+      "desc": "Manage your restaurant, menu, and earnings.",
+      "features": ["Add your menu", "Manage orders", "View earnings"]
     },
-    "alreadyHaveAccount": "Already have an account?"
+    "alreadyHaveAccount": "Already have an account?",
+    "loginNow": "Login Now"
   },
   "login": {
     "title": "Sign In",
-    "subtitle": "Welcome back to Msosi Fasta",
-    "username": "USERNAME",
-    "password": "PASSWORD",
-    "usernamePlaceholder": "Enter your username",
-    "noAccount": "Don't have an account?"
+    "welcomeBack": "Welcome Back! 👋",
+    "subtitle": "Sign in to continue with your orders",
+    "formTitle": "Sign In",
+    "formSubtitle": "Fill in your username and password",
+    "usernameLabel": "Username",
+    "passwordLabel": "Password",
+    "forgotPassword": "Forgot Password?",
+    "loginBtn": "Sign In",
+    "noAccount": "Don't have an account?",
+    "joinFree": "Join Free",
+    "errorAllFields": "Please fill all fields"
   },
   "register": {
     "title": "Create Account",
@@ -49,9 +59,32 @@
     "morning": "Good morning",
     "afternoon": "Good afternoon",
     "evening": "Good evening",
-    "searchPlaceholder": "Search for food or restaurants",
+    "searchPlaceholder": "Search for restaurants or food",
     "nearby": "Restaurants Near You",
-    "resultsFor": "Results for \"%{search}\""
+    "openNow": "Open Now",
+    "resultsFor": "Results for \"%{search}\"",
+    "restaurantsCount": "%{count} restaurants",
+    "loading": "Loading restaurants...",
+    "closed": "Closed",
+    "freeDelivery": "Free Delivery",
+    "deliveryTime": "30-45 min",
+    "view": "View",
+    "viewMyCart": "View my Cart",
+    "welcomePromo": "Welcome to Msosi Fasta!",
+    "promoDesc": "Get the best food, as fast as possible",
+    "defaultDesc": "Welcome to dine with us!",
+    "noResults": "No Results",
+    "noResultsDesc": "No restaurant found for \"%{search}\"",
+    "noRestaurants": "No Restaurants",
+    "noRestaurantsDesc": "Restaurants will appear here once registered",
+    "categories": {
+      "all": "All",
+      "local": "Local",
+      "drinks": "Drinks",
+      "snacks": "Snacks",
+      "meat": "Meat",
+      "fish": "Fish"
+    }
   },
   "settings": {
     "title": "Settings",
@@ -64,14 +97,16 @@
     "locationSub": "Better restaurant results",
     "language": "LANGUAGE & REGION",
     "appLanguage": "App Language",
-    "appLanguageSub": "Swahili / English",
+    "appLanguageSub": "Choose your preferred language",
+    "currentLanguage": "English",
     "support": "SUPPORT & SECURITY",
     "privacy": "Privacy Policy",
     "privacySub": "How we use your data",
     "password": "Change Password",
     "passwordSub": "Update security",
     "deleteAccount": "Delete Account",
-    "deleteAccountSub": "Permanent action"
+    "deleteAccountSub": "Permanent action",
+    "version": "Msosi Fasta v%{version} (Build %{build})"
   },
   "profile": {
     "myOrders": "My Orders",
@@ -84,45 +119,67 @@
       "orders": "Orders",
       "reviews": "Reviews",
       "points": "Points"
+    },
+    "owner": {
+      "restaurantInfo": "Restaurant Info",
+      "payoutSettings": "Payout Settings"
     }
   },
   "cart": {
-    "title": "Cart",
+    "title": "My Cart",
     "viewCart": "View Cart",
     "addToCart": "Add to Cart",
-    "emptyTitle": "Your cart is empty",
-    "emptyDesc": "Your cart is empty. Add some delicious food!",
-    "browseFood": "Browse Food",
+    "emptyTitle": "Your Cart is Empty",
+    "emptyDesc": "Add some delicious food from restaurants to continue.",
+    "browseRestaurants": "Browse Restaurants",
     "clearAll": "Clear All",
-    "summary": "Summary",
-    "subtotal": "Subtotal",
-    "delivery": "Delivery",
-    "total": "Total",
-    "proceed": "Proceed to Payment",
-    "secured": "SECURED BY MSOSI FASTA PAY"
+    "summary": "Order Summary",
+    "subtotal": "Food Total",
+    "delivery": "Delivery Fee",
+    "total": "Grand Total",
+    "proceed": "Pay Now",
+    "secured": "Secure payment processing",
+    "items": "%{count} items",
+    "foodFrom": "Food from %{restaurant}",
+    "errorCreate": "Failed to create order. Please try again."
   },
   "orders": {
     "title": "My Orders",
-    "empty": "No orders yet",
-    "emptyDesc": "Your orders will appear here",
+    "subtitle": "Track your order status",
+    "loading": "Loading orders...",
+    "orderLabel": "ORDER",
+    "itemPlaceholder": "Item",
+    "itemsPreview": "Order items",
+    "empty": "No Orders Yet",
+    "emptyDesc": "Your orders will appear here after placing an order.",
+    "orderNow": "Order Food",
     "status": {
       "pending": "Pending",
-      "ready": "Ready",
+      "confirmed": "Confirmed",
+      "preparing": "Preparing",
+      "on_the_way": "On the Way",
       "delivered": "Delivered",
-      "cancelled": "Cancelled"
+      "cancelled": "Cancelled",
+      "ready": "Ready"
     }
   },
   "search": {
     "title": "Search",
-    "placeholder": "Search for food or restaurants",
-    "noResults": "No results found",
-    "noResultsDesc": "We couldn't find what you're looking for"
+    "subtitle": "Find your favorite food or restaurant",
+    "placeholder": "Search for restaurants, food...",
+    "commonKeywords": "Common Searches",
+    "searching": "Searching...",
+    "resultsCount": "%{count} results for \"%{query}\"",
+    "noResults": "No Results Found",
+    "noResultsDesc": "No results for \"%{query}\". Try another keyword."
   },
   "payment": {
     "title": "Payment",
     "success": "Order Received!",
     "method": "Select Payment Method",
-    "pay": "Pay Now"
+    "pay": "Pay Now",
+    "errorTitle": "Error",
+    "errorDesc": "Failed to initialize payment. Try again later."
   },
   "restaurant": {
     "welcome": "Welcome and enjoy our delicious meals!",
@@ -141,5 +198,82 @@
     "cart": "Cart",
     "orders": "Orders",
     "profile": "Account"
+  },
+  "order": {
+    "pending": "Order Received",
+    "confirmed": "Confirmed",
+    "preparing": "Preparing",
+    "onTheWay": "On the Way",
+    "delivered": "Delivered",
+    "trackOrder": "Track Order",
+    "orderId": "ORDER #%{id}",
+    "needHelp": "Need Help?",
+    "currently": "CURRENTLY",
+    "confirmReceived": "Confirm Received",
+    "receivedTitle": "Order Completed",
+    "receivedMessage": "Thanks. Your order has been marked as received.",
+    "receivedError": "Failed to confirm received. Please try again."
+  },
+  "owner": {
+    "menu": {
+      "title": "Menu Items",
+      "add": "Add",
+      "selectPhoto": "Select Photo",
+      "name": "Name",
+      "price": "Price (TSh)",
+      "desc": "Description",
+      "save": "Save Dish",
+      "editTitle": "Edit Dish",
+      "addTitle": "Add New Dish"
+    },
+    "earnings": {
+      "title": "Earnings",
+      "thisWeek": "This Week",
+      "today": "Today",
+      "thisMonth": "This Month",
+      "availableBalance": "Available after customer confirmation or auto-completion",
+      "pending": "Pending",
+      "inTransit": "In Transit",
+      "withdraw": "Withdraw",
+      "recentPayouts": "Recent Payouts",
+      "amount": "Amount (TSh)",
+      "confirmWithdrawal": "Confirm Withdrawal",
+      "ordersCount": "%{count} Orders",
+      "noPayouts": "No payouts yet",
+      "withdrawalInfo": "Funds will be sent to your registered M-Pesa number."
+    },
+    "orders": {
+      "title": "All Orders",
+      "found": "%{count} orders found",
+      "loading": "Loading orders...",
+      "empty": "No Orders",
+      "emptyFilter": "No orders in this filter",
+      "customer": "Customer",
+      "items": "%{count} items",
+      "item": "Item",
+      "total": "Order Total",
+      "errorUpdate": "Failed to update order status",
+      "tabs": {
+        "all": "All",
+        "new": "New",
+        "preparing": "Preparing",
+        "ready": "Ready",
+        "history": "History"
+      },
+      "actions": {
+        "prepare": "Prepare",
+        "ready": "Ready",
+        "send": "Send"
+      },
+      "status": {
+        "pending": "Pending",
+        "confirmed": "Confirmed",
+        "preparing": "Preparing",
+        "on_the_way": "On the Way",
+        "delivered": "Delivered",
+        "cancelled": "Cancelled",
+        "ready": "Ready"
+      }
+    }
   }
 }

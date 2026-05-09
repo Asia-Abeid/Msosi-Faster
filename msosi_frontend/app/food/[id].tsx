@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Colors, FontSize, Spacing, Radius, Shadow } from '../../constants/colors';
-import { restaurantsApi, BASE_URL } from '../../services/api';
+import { restaurantsApi, BASE_URL, resolveImageUri } from '../../services/api';
 import { useCart } from '../../store/CartContext';
 import axios from 'axios';
 import i18n from '../../constants/i18n';
@@ -46,7 +46,7 @@ export default function FoodDetailScreen() {
   }
 
   const quantity = getItemQuantity(Number(id));
-  const imgUri = food?.image ? `${BASE_URL.replace('/api', '')}${food.image}` : null;
+  const imgUri = resolveImageUri(food?.image);
 
   return (
     <View style={styles.container}>

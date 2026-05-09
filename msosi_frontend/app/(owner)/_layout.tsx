@@ -84,7 +84,7 @@ export default function OwnerLayout() {
         name="orders"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon name={focused ? 'time' : 'time-outline'} focused={focused} label="History" />
+            <TabIcon name={focused ? 'receipt' : 'receipt-outline'} focused={focused} label="Orders" />
           ),
         }}
       />

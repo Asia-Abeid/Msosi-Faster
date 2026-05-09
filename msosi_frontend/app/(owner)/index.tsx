@@ -25,7 +25,12 @@ export default function OwnerDashboard() {
   const router = useRouter();
   const { user } = useAuth();
   const [incomingOrders, setIncomingOrders] = useState<any[]>([]);
-  const [stats, setStats] = useState({ todayOrders: 0, todaySales: 0, weekSales: 0, rating: 4.8 });
+  const [stats, setStats] = useState({
+    completedOrders: 0,
+    availableBalance: 0,
+    pendingEarnings: 0,
+    inTransitCount: 0,
+  });
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -37,10 +42,10 @@ export default function OwnerDashboard() {
       ]);
       setIncomingOrders(ordersRes.data.results || ordersRes.data || []);
       setStats({
-        todayOrders: earningsRes?.data?.order_count || 0,
-        todaySales: earningsRes?.data?.total_earned_today || 0,
-        weekSales: earningsRes?.data?.total_earned_this_week || 0,
-        rating: 4.8,
+        completedOrders: earningsRes?.data?.order_count || 0,
+        availableBalance: Number(earningsRes?.data?.available_balance || 0),
+        pendingEarnings: Number(earningsRes?.data?.pending_earnings || 0),
+        inTransitCount: earningsRes?.data?.in_transit_count || 0,
       });
     } catch (e: any) {
       setIncomingOrders([]);
@@ -98,11 +103,11 @@ export default function OwnerDashboard() {
 
             {/* Stats row inside hero */}
             <View style={styles.statsRow}>
-              <StatChip icon="receipt-outline" label="Oda Leo" value={String(stats.todayOrders)} />
+              <StatChip icon="receipt-outline" label="Zilizokamilika" value={String(stats.completedOrders)} />
               <View style={styles.statsDivider} />
-              <StatChip icon="wallet-outline" label="Mapato Leo" value={`TSh ${stats.todaySales.toLocaleString()}`} />
+              <StatChip icon="wallet-outline" label="Yanayopatikana" value={`TSh ${stats.availableBalance.toLocaleString()}`} />
               <View style={styles.statsDivider} />
-              <StatChip icon="star" label="Rating" value={String(stats.rating)} iconColor="#F59E0B" />
+              <StatChip icon="bicycle-outline" label="Njiani" value={String(stats.inTransitCount)} />
             </View>
           </LinearGradient>
 
@@ -110,8 +115,8 @@ export default function OwnerDashboard() {
           <View style={styles.weekCard}>
             <LinearGradient colors={['#5D1D00', '#C43C00']} style={styles.weekGrad} start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}>
               <View style={styles.weekLeft}>
-                <Text style={styles.weekLabel}>💰 Mapato ya Wiki Hii</Text>
-                <Text style={styles.weekValue}>TSh {stats.weekSales.toLocaleString()}</Text>
+                <Text style={styles.weekLabel}>Mapato Yanayosubiri</Text>
+                <Text style={styles.weekValue}>TSh {stats.pendingEarnings.toLocaleString()}</Text>
               </View>
               <TouchableOpacity style={styles.weekBtn} onPress={() => router.push('/(owner)/earnings')}>
                 <Text style={styles.weekBtnTxt}>Tazama</Text>
