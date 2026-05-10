@@ -11,6 +11,7 @@ import logging
 from .models import Payment
 from .serializers import PaymentCreateSerializer, PaymentSerializer
 from .selcom_service import SelcomPaymentService
+from .validators import PaymentValidator
 from orders.models import Order
 from orders.services import auto_deliver_stale_orders
 
@@ -40,6 +41,17 @@ class PaymentCreateView(generics.CreateAPIView):
             raise exceptions.NotFound('Order not found')
         
         payment_method = self.request.data.get('payment_method', 'mpesa')
+        
+        # Validate payment creation
+        is_valid, error_message = PaymentValidator.validate_payment_creation(
+            customer=self.request.user,
+            order=order,
+            payment_method=payment_method
+        )
+        
+        if not is_valid:
+            logger.warning(f"Payment validation failed for order {order.id}: {error_message}")
+            raise exceptions.ValidationError({'detail': error_message})
         
         # Create payment record
         payment = serializer.save(
@@ -122,9 +134,12 @@ class PaymentVerifyView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         payment = self.get_object()
         
-        if not payment.transaction_id:
+        # Validate payment verification
+        is_valid, error_message = PaymentValidator.validate_payment_verification(payment)
+        if not is_valid:
+            logger.warning(f"Payment verification validation failed for payment {payment.id}: {error_message}")
             return Response(
-                {'error': 'No transaction ID found'},
+                {'error': error_message},
                 status=status.HTTP_400_BAD_REQUEST
             )
         
@@ -174,31 +189,38 @@ class PaymentRefundView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         payment = self.get_object()
         
-        if payment.status == 'refunded':
-            return Response(
-                {'error': 'Payment already refunded'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        if payment.status != 'completed':
-            return Response(
-                {'error': 'Only completed payments can be refunded'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
-        if not payment.transaction_id:
-            return Response(
-                {'error': 'No transaction ID found'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
         amount = request.data.get('amount')
         reason = request.data.get('reason', 'Refund requested')
+        
+        # Parse amount if provided
+        refund_amount = None
+        if amount:
+            try:
+                from decimal import Decimal
+                refund_amount = Decimal(str(amount))
+            except (ValueError, TypeError):
+                return Response(
+                    {'error': 'Invalid refund amount format'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+        
+        # Validate refund
+        is_valid, error_message = PaymentValidator.validate_payment_refund(
+            payment=payment,
+            refund_amount=refund_amount
+        )
+        
+        if not is_valid:
+            logger.warning(f"Payment refund validation failed for payment {payment.id}: {error_message}")
+            return Response(
+                {'error': error_message},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Request refund from Selcom
         success, response = SelcomPaymentService.refund_payment(
             transaction_id=payment.transaction_id,
-            amount=amount,
+            amount=refund_amount,
             reason=reason
         )
         
@@ -247,6 +269,15 @@ def selcom_payment_callback(request):
             payload = json.loads(request.data)
         else:
             payload = request.data
+        
+        # Validate webhook payload structure
+        is_valid, error_message = PaymentValidator.validate_webhook_payload(payload)
+        if not is_valid:
+            logger.warning(f"Invalid webhook payload: {error_message}")
+            return Response(
+                {'error': error_message},
+                status=status.HTTP_400_BAD_REQUEST
+            )
         
         # Verify signature
         signature = request.headers.get('X-SELCOM-SIGNATURE', '')
